@@ -35,7 +35,7 @@ Apache License v2
 
 ## Authors
 - This library was hacked together by Dominik Schürmann
-- Original [TagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/Handling_Custom_Tags_Using_Html.tagHandler().html)
+- Original [TagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/)
 - Original [UrlImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
 
