@@ -1,4 +1,4 @@
-# HTML TextView for Android
+# HtmlTextView for Android
 
 This HtmlTextView supports all HTML tags supported by Android's Html class (see [The CommonsBlog](http://commonsware.com/blog/Android/2010/05/26/html-tags-supported-by-textview.html) and [history of Html class](https://github.com/android/platform_frameworks_base/commits/master/core/java/android/text/Html.java) for newer additions).
 Additionally, list tags are supported (``<ul>``, ``<ol>``, ``<dd>``) and code tags with ``<code>``.
@@ -26,8 +26,8 @@ text.setHtmlFromRawResource(this, R.raw.help);
 
 ## Use library as Gradle dependency (Android library project)
 
-1. Copy this folder to your project and include it in ``settings.gradle`` with ``include ':HtmlTextView'``
-2. Add dependency ``compile project(':HtmlTextView')`` to your project's ``build.gradle``.
+1. Copy this folder to your project and include it in ``settings.gradle`` with ``include ':html-textview'``
+2. Add dependency ``compile project(':html-textview')`` to your project's ``build.gradle``.
 
 ## License
 
