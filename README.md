@@ -3,9 +3,9 @@
 This HtmlTextView supports all HTML tags supported by Android's Html class (see [The CommonsBlog](http://commonsware.com/blog/Android/2010/05/26/html-tags-supported-by-textview.html) and [history of Html class](https://github.com/android/platform_frameworks_base/commits/master/core/java/android/text/Html.java) for newer additions).
 Additionally, list tags are supported (``<ul>``, ``<ol>``, ``<dd>``) and code tags with ``<code>``.
 
-This also includes a workaround to prevent TextView crashing on [specific Android versions](http://code.google.com/p/android/issues/detail?id=35466).
+This also includes a workaround to prevent TextView from crashing on [specific Android versions](http://code.google.com/p/android/issues/detail?id=35466).
 
-This library is kept very tiny with no external dependencies.
+This library is kept tiny without external dependencies.
 I am using it to provide Help/About Activities in my apps.
 
 ## Example
@@ -26,15 +26,16 @@ text.setHtmlFromRawResource(this, R.raw.help);
 
 ## Use library as Gradle dependency (Android library project)
 
-1. Copy this folder to your project and include it in ``settings.gradle`` with ``include ':html-textview'``
+1. Copy the cloned folder to your project and define it in your ``settings.gradle`` with ``include ':html-textview'``
 2. Add dependency ``compile project(':html-textview')`` to your project's ``build.gradle``.
 
 ## License
-
 Apache License v2
 
+See LICENSE for full license text.
+
 ## Authors
-- This library was hacked together by Dominik Schürmann
+- This library was put together by Dominik Schürmann
 - Original [TagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/)
 - Original [UrlImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
