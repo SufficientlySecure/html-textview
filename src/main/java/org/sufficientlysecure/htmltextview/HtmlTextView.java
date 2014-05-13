@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2013-2014 Dominik Schürmann <dominik@dominikschuermann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,11 +58,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param context
      * @param id      for example: R.raw.help
      */
-    public void setHtmlFromRawResource(Context context, int id) {
+    public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables) {
         // load html from html file from /res/raw
         InputStream inputStreamText = context.getResources().openRawResource(id);
 
-        setHtmlFromString(convertStreamToString(inputStreamText));
+        setHtmlFromString(convertStreamToString(inputStreamText), useLocalDrawables);
     }
 
     /**
@@ -70,14 +70,20 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *
      * @param html String containing HTML, for example: "<b>Hello world!</b>"
      */
-    public void setHtmlFromString(String html) {
+    public void setHtmlFromString(String html, boolean useLocalDrawables) {
+        Html.ImageGetter imgGetter;
+        if (useLocalDrawables) {
+            imgGetter = new LocalImageGetter(getContext());
+        } else {
+            imgGetter = new UrlImageGetter(this, getContext());
+        }
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
-        setText(Html.fromHtml(html, new UrlImageGetter(this, getContext()), new HtmlTagHandler()));
+        setText(Html.fromHtml(html, imgGetter, new HtmlTagHandler()));
 
         // make links work
         setMovementMethod(LinkMovementMethod.getInstance());
 
-        // no flickering when clicking textview for Android < 4
+        // no flickering when clicking textview for Android < 4, but overriders color...
 //        text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark_nodisable));
     }
 }
