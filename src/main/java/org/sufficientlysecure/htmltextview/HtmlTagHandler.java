@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2013-2014 Dominik Schürmann <dominik@dominikschuermann.de>
  * Copyright (C) 2013 Mohammed Lakkadshaw
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +27,6 @@ import android.text.Spannable;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 
 public class HtmlTagHandler implements Html.TagHandler {
     private int mListItemCount = 0;
@@ -34,20 +34,20 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
-
-        if (tag.equals("ul") || tag.equals("ol") || tag.equals("dd")) {
+        if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
             if (opening) {
                 mListParents.add(tag);
-            } else mListParents.remove(tag);
+            } else {
+                mListParents.remove(tag);
+            }
 
             mListItemCount = 0;
-        } else if (tag.equals("li") && !opening) {
+        } else if (tag.equalsIgnoreCase("li") && !opening) {
             handleListTag(output);
         } else if (tag.equalsIgnoreCase("code")) {
             if (opening) {
                 output.setSpan(new TypefaceSpan("monospace"), output.length(), output.length(), Spannable.SPAN_MARK_MARK);
             } else {
-                Log.d(HtmlTextView.TAG, "Code tag encountered");
                 Object obj = getLast(output, TypefaceSpan.class);
                 int where = output.getSpanStart(obj);
                 output.setSpan(new TypefaceSpan("monospace"), where, output.length(), 0);

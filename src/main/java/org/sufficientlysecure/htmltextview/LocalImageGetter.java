@@ -32,9 +32,7 @@ public class LocalImageGetter implements Html.ImageGetter {
     }
 
     public Drawable getDrawable(String source) {
-        int id;
-
-        id = c.getResources().getIdentifier(source, "drawable", c.getPackageName());
+        int id = c.getResources().getIdentifier(source, "drawable", c.getPackageName());
 
         if (id == 0) {
             // the drawable resource wasn't found in our package, maybe it is a stock android drawable?
@@ -43,7 +41,7 @@ public class LocalImageGetter implements Html.ImageGetter {
 
         if (id == 0) {
             // prevent a crash if the resource still can't be found
-            Log.e("LocalImageGetter", "source could not be found: " + source);
+            Log.e(HtmlTextView.TAG, "source could not be found: " + source);
             return null;
         } else {
             Drawable d = c.getResources().getDrawable(id);
