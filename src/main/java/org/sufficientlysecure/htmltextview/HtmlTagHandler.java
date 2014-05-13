@@ -23,35 +23,87 @@ import org.xml.sax.XMLReader;
 
 import android.text.Editable;
 import android.text.Html;
+import android.text.Layout;
 import android.text.Spannable;
+import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 
+/**
+ * Some parts of this code are based on android.text.Html
+ */
 public class HtmlTagHandler implements Html.TagHandler {
     private int mListItemCount = 0;
     private Vector<String> mListParents = new Vector<String>();
 
+    private static class Code {
+    }
+
+    private static class Center {
+    }
+
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
-        if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
-            if (opening) {
-                mListParents.add(tag);
-            } else {
-                mListParents.remove(tag);
-            }
+        if (opening) {
+            // opening tag
+            if (HtmlTextView.DEBUG)
+                Log.d(HtmlTextView.TAG, "opening: " + output.toString());
 
-            mListItemCount = 0;
-        } else if (tag.equalsIgnoreCase("li") && !opening) {
-            handleListTag(output);
-        } else if (tag.equalsIgnoreCase("code")) {
-            if (opening) {
-                output.setSpan(new TypefaceSpan("monospace"), output.length(), output.length(), Spannable.SPAN_MARK_MARK);
-            } else {
-                Object obj = getLast(output, TypefaceSpan.class);
-                int where = output.getSpanStart(obj);
-                output.setSpan(new TypefaceSpan("monospace"), where, output.length(), 0);
+            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
+                mListParents.add(tag);
+                mListItemCount = 0;
+            } else if (tag.equalsIgnoreCase("code")) {
+                start(output, new Code());
+            } else if (tag.equalsIgnoreCase("center")) {
+                start(output, new Center());
             }
+        } else {
+            // closing tag
+            if (HtmlTextView.DEBUG)
+                Log.d(HtmlTextView.TAG, "closing: " + output.toString());
+
+            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
+                mListParents.remove(tag);
+                mListItemCount = 0;
+            } else if (tag.equalsIgnoreCase("li")) {
+                handleListTag(output);
+            } else if (tag.equalsIgnoreCase("code")) {
+                end(output, Code.class, new TypefaceSpan("monospace"), false);
+            } else if (tag.equalsIgnoreCase("center")) {
+                end(output, Center.class, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), true);
+            }
+        }
+    }
+
+    private void start(Editable output, Object mark) {
+        int len = output.length();
+        output.setSpan(mark, len, len, Spannable.SPAN_MARK_MARK);
+
+        if (HtmlTextView.DEBUG)
+            Log.d(HtmlTextView.TAG, "len: " + len);
+    }
+
+    private void end(Editable output, Class kind, Object repl, boolean paragraphStyle) {
+        int len = output.length();
+        Object obj = getLast(output, kind);
+        int where = output.getSpanStart(obj);
+
+        output.removeSpan(obj);
+
+        if (where != len) {
+            // paragraph styles like AlignmentSpan need to end with a new line!
+            if (paragraphStyle) {
+                output.append("\n");
+                len++;
+            }
+            output.setSpan(repl, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        if (HtmlTextView.DEBUG) {
+            Log.d(HtmlTextView.TAG, "where: " + where);
+            Log.d(HtmlTextView.TAG, "len: " + len);
         }
     }
 

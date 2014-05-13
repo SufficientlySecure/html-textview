@@ -26,6 +26,7 @@ import java.io.InputStream;
 public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
+    public static final boolean DEBUG = false;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
