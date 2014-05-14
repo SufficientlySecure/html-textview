@@ -55,8 +55,7 @@ public class UrlImageGetter implements ImageGetter {
 
         asyncTask.execute(source);
 
-        // return reference to URLDrawable where I will change with actual image from
-        // the src tag
+        // return reference to URLDrawable which will asynchronously load the image specified in the src tag
         return urlDrawable;
     }
 
@@ -78,8 +77,7 @@ public class UrlImageGetter implements ImageGetter {
             // set the correct bound according to the result from HTTP call
             urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 + result.getIntrinsicHeight());
 
-            // change the reference of the current drawable to the result
-            // from the HTTP call
+            // change the reference of the current drawable to the result from the HTTP call
             urlDrawable.drawable = result;
 
             // redraw the image by invalidating the container
@@ -113,8 +111,6 @@ public class UrlImageGetter implements ImageGetter {
 
     @SuppressWarnings("deprecation")
     public class UrlDrawable extends BitmapDrawable {
-        // the drawable that you need to set, you could set the initial drawing
-        // with the loading image if you need to
         protected Drawable drawable;
 
         @Override
