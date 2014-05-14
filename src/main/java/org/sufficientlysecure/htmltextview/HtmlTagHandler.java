@@ -48,8 +48,9 @@ public class HtmlTagHandler implements Html.TagHandler {
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
         if (opening) {
             // opening tag
-            if (HtmlTextView.DEBUG)
-                Log.d(HtmlTextView.TAG, "opening: " + output.toString());
+            if (HtmlTextView.DEBUG) {
+                Log.d(HtmlTextView.TAG, "opening, output: " + output.toString());
+            }
 
             if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
                 mListParents.add(tag);
@@ -61,8 +62,9 @@ public class HtmlTagHandler implements Html.TagHandler {
             }
         } else {
             // closing tag
-            if (HtmlTextView.DEBUG)
-                Log.d(HtmlTextView.TAG, "closing: " + output.toString());
+            if (HtmlTextView.DEBUG) {
+                Log.d(HtmlTextView.TAG, "closing, output: " + output.toString());
+            }
 
             if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
                 mListParents.remove(tag);
@@ -77,18 +79,27 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
+    /**
+     * Mark the opening tag by using private classes
+     *
+     * @param output
+     * @param mark
+     */
     private void start(Editable output, Object mark) {
         int len = output.length();
         output.setSpan(mark, len, len, Spannable.SPAN_MARK_MARK);
 
-        if (HtmlTextView.DEBUG)
+        if (HtmlTextView.DEBUG) {
             Log.d(HtmlTextView.TAG, "len: " + len);
+        }
     }
 
     private void end(Editable output, Class kind, Object repl, boolean paragraphStyle) {
-        int len = output.length();
         Object obj = getLast(output, kind);
+        // start of the tag
         int where = output.getSpanStart(obj);
+        // end of the tag
+        int len = output.length();
 
         output.removeSpan(obj);
 
@@ -107,6 +118,13 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
+    /**
+     * Get last marked position of a specific tag kind (private class)
+     *
+     * @param text
+     * @param kind
+     * @return
+     */
     private Object getLast(Editable text, Class kind) {
         Object[] objs = text.getSpans(0, text.length(), kind);
         if (objs.length == 0) {
