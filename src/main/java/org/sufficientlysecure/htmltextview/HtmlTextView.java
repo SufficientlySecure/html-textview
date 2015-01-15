@@ -18,8 +18,8 @@ package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.io.InputStream;
 
@@ -53,7 +53,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         return s.hasNext() ? s.next() : "";
     }
 
-     @Override
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         linkHit = false;
         boolean res = super.onTouchEvent(event);

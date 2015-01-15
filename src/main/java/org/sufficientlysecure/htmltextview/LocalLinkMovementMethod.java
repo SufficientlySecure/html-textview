@@ -1,4 +1,4 @@
-package com.hujiang.android.uikit.htmltextview;
+package org.sufficientlysecure.htmltextview;
 
 import android.text.Layout;
 import android.text.Selection;
