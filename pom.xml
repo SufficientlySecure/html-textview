@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.sufficientlysecure</groupId>
+  <artifactId>html-textview</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <name>Android HTML Textview</name>
+  <url>https://github.com/dschuermann/html-textview</url>
+  <description>HtmlTextView for Android</description>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>https://github.com/dschuermann/html-textview/blob/master/LICENSE</url>
+    </license>
+  </licenses>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <finalName>html-textview</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>2.3.1</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
