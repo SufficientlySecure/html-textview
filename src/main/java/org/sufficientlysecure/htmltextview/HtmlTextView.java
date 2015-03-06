@@ -18,8 +18,8 @@ package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.io.InputStream;
 
@@ -27,6 +27,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
+    boolean dontConsumeNonUrlClicks = true;
+    boolean linkHit;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -49,6 +51,17 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     static private String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        linkHit = false;
+        boolean res = super.onTouchEvent(event);
+
+        if (dontConsumeNonUrlClicks)
+            return linkHit;
+        return res;
+
     }
 
     /**
@@ -82,7 +95,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         setText(Html.fromHtml(html, imgGetter, new HtmlTagHandler()));
 
         // make links work
-        setMovementMethod(LinkMovementMethod.getInstance());
+        setMovementMethod(LocalLinkMovementMethod.getInstance());
 
         // no flickering when clicking textview for Android < 4, but overriders color...
 //        text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark_nodisable));
