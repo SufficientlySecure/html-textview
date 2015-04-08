@@ -12,7 +12,6 @@ It is a replacement for usage of the WebView component, which behaves strange on
 * ``<strong>`` ([bug on some Android versions: generates italic](https://code.google.com/p/android/issues/detail?id=3473))
 * ``<em>`` ([bug on some Android versions: generates bold](https://code.google.com/p/android/issues/detail?id=3473))
 * ``<u>``
-* ``<strike>``
 * ``<tt>``
 * ``<dfn>``
 * ``<sub>``
@@ -33,6 +32,7 @@ It is a replacement for usage of the WebView component, which behaves strange on
 * ``<li>``
 * ``<code>``
 * ``<center>``
+* ``<strike>``
 
 The library also includes a workaround to prevent TextView from crashing on [specific Android versions](http://code.google.com/p/android/issues/detail?id=35466) and the possibility to load images from local drawables folder or from the Internet.
 
