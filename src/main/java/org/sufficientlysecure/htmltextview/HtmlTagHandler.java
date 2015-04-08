@@ -43,9 +43,9 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     private static class Center {
     }
-	
-	private static class Strike{
-	}
+    
+    private static class Strike{
+    }
 
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
