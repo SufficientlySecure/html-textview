@@ -43,6 +43,9 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     private static class Center {
     }
+	
+	private static class Strike{
+	}
 
     @Override
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
@@ -59,6 +62,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
                 start(output, new Center());
+            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")){
+                start(output,new Strike());
             }
         } else {
             // closing tag
@@ -75,6 +80,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                 end(output, Code.class, new TypefaceSpan("monospace"), false);
             } else if (tag.equalsIgnoreCase("center")) {
                 end(output, Center.class, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), true);
+            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")){
+                end(output, Strike.class,new StrikethroughSpan(),false);
             }
         }
     }
