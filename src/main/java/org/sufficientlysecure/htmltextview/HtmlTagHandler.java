@@ -28,6 +28,7 @@ import android.text.Spannable;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
 
@@ -43,8 +44,8 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     private static class Center {
     }
-    
-    private static class Strike{
+
+    private static class Strike {
     }
 
     @Override
@@ -62,8 +63,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
                 start(output, new Center());
-            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")){
-                start(output,new Strike());
+            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
+                start(output, new Strike());
             }
         } else {
             // closing tag
@@ -80,8 +81,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                 end(output, Code.class, new TypefaceSpan("monospace"), false);
             } else if (tag.equalsIgnoreCase("center")) {
                 end(output, Center.class, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), true);
-            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")){
-                end(output, Strike.class,new StrikethroughSpan(),false);
+            } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
+                end(output, Strike.class, new StrikethroughSpan(), false);
             }
         }
     }

@@ -27,8 +27,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
-    boolean dontConsumeNonUrlClicks = true;
-    boolean linkHit;
+    boolean mDontConsumeNonUrlClicks = true;
+    boolean mLinkHit;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -55,13 +55,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        linkHit = false;
+        mLinkHit = false;
         boolean res = super.onTouchEvent(event);
 
-        if (dontConsumeNonUrlClicks)
-            return linkHit;
+        if (mDontConsumeNonUrlClicks) {
+            return mLinkHit;
+        }
         return res;
-
     }
 
     /**
