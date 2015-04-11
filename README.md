@@ -42,21 +42,29 @@ I am using it to provide Help/About Activities in my apps.
 ## Example
 
 ```java
-HtmlTextView text = new HtmlTextView(this);
+<org.sufficientlysecure.htmltextview.HtmlTextView
+            android:id="@+id/html_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="@android:style/TextAppearance.Small" />
+```
+
+```java
+HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's drawable folder
 text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", true);
 ```
 or
 ```java
-HtmlTextView text = new HtmlTextView(this);
+HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
 text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", false);
 ```
 or
 ```java
-HtmlTextView text = new HtmlTextView(this);
+HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
 text.setHtmlFromRawResource(this, R.raw.help, true);
