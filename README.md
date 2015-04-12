@@ -80,7 +80,6 @@ text.setHtmlFromRawResource(this, R.raw.help, true);
 ### Extended support by HtmlTextView
 * ``<ul>``
 * ``<ol>``
-* ``<dd>``
 * ``<li>``
 * ``<code>``
 * ``<center>``

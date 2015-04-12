@@ -1,6 +1,8 @@
 /*
- * Copyright (C) 2013-2014 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2013-2015 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2013-2015 Juha Kuitunen
  * Copyright (C) 2013 Mohammed Lakkadshaw
+ * Copyright (C) 2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +19,11 @@
 
 package org.sufficientlysecure.htmltextview;
 
-import java.util.Vector;
-
-import org.xml.sax.XMLReader;
-
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.Spanned;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
@@ -32,12 +31,36 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
 
+import org.xml.sax.XMLReader;
+
+import java.util.Stack;
+
 /**
  * Some parts of this code are based on android.text.Html
  */
 public class HtmlTagHandler implements Html.TagHandler {
-    private int mListItemCount = 0;
-    private Vector<String> mListParents = new Vector<>();
+    /**
+     * Keeps track of lists (ol, ul). On bottom of Stack is the outermost list
+     * and on top of Stack is the most nested list
+     */
+    Stack<String> lists = new Stack<>();
+    /**
+     * Tracks indexes of ordered lists so that after a nested list ends
+     * we can continue with correct index of outer list
+     */
+    Stack<Integer> olNextIndex = new Stack<>();
+    /**
+     * List indentation in pixels. Nested lists use multiple of this.
+     */
+    private static final int indent = 10;
+    private static final int listItemIndent = indent * 2;
+    private static final BulletSpan bullet = new BulletSpan(indent);
+
+    private static class Ul {
+    }
+
+    private static class Ol {
+    }
 
     private static class Code {
     }
@@ -56,9 +79,23 @@ public class HtmlTagHandler implements Html.TagHandler {
                 Log.d(HtmlTextView.TAG, "opening, output: " + output.toString());
             }
 
-            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
-                mListParents.add(tag);
-                mListItemCount = 0;
+            if (tag.equalsIgnoreCase("ul")) {
+                lists.push(tag);
+            } else if (tag.equalsIgnoreCase("ol")) {
+                lists.push(tag);
+                olNextIndex.push(1);
+            } else if (tag.equalsIgnoreCase("li")) {
+                if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
+                    output.append("\n");
+                }
+                String parentList = lists.peek();
+                if (parentList.equalsIgnoreCase("ol")) {
+                    start(output, new Ol());
+                    output.append(olNextIndex.peek().toString()).append(". ");
+                    olNextIndex.push(olNextIndex.pop() + 1);
+                } else if (parentList.equalsIgnoreCase("ul")) {
+                    start(output, new Ul());
+                }
             } else if (tag.equalsIgnoreCase("code")) {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
@@ -72,17 +109,47 @@ public class HtmlTagHandler implements Html.TagHandler {
                 Log.d(HtmlTextView.TAG, "closing, output: " + output.toString());
             }
 
-            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
-                mListParents.remove(tag);
-                mListItemCount = 0;
+            if (tag.equalsIgnoreCase("ul")) {
+                lists.pop();
+            } else if (tag.equalsIgnoreCase("ol")) {
+                lists.pop();
+                olNextIndex.pop();
             } else if (tag.equalsIgnoreCase("li")) {
-                handleListTag(output);
+                if (lists.peek().equalsIgnoreCase("ul")) {
+                    if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
+                        output.append("\n");
+                    }
+                    // Nested BulletSpans increases distance between bullet and text, so we must prevent it.
+                    int bulletMargin = indent;
+                    if (lists.size() > 1) {
+                        bulletMargin = indent - bullet.getLeadingMargin(true);
+                        if (lists.size() > 2) {
+                            // This get's more complicated when we add a LeadingMarginSpan into the same line:
+                            // we have also counter it's effect to BulletSpan
+                            bulletMargin -= (lists.size() - 2) * listItemIndent;
+                        }
+                    }
+                    BulletSpan newBullet = new BulletSpan(bulletMargin);
+                    end(output, Ul.class, false,
+                            new LeadingMarginSpan.Standard(listItemIndent * (lists.size() - 1)),
+                            newBullet);
+                } else if (lists.peek().equalsIgnoreCase("ol")) {
+                    if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
+                        output.append("\n");
+                    }
+                    int numberMargin = listItemIndent * (lists.size() - 1);
+                    if (lists.size() > 2) {
+                        // Same as in ordered lists: counter the effect of nested Spans
+                        numberMargin -= (lists.size() - 2) * listItemIndent;
+                    }
+                    end(output, Ol.class, false, new LeadingMarginSpan.Standard(numberMargin));
+                }
             } else if (tag.equalsIgnoreCase("code")) {
-                end(output, Code.class, new TypefaceSpan("monospace"), false);
+                end(output, Code.class, false, new TypefaceSpan("monospace"));
             } else if (tag.equalsIgnoreCase("center")) {
-                end(output, Center.class, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), true);
+                end(output, Center.class, true, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER));
             } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
-                end(output, Strike.class, new StrikethroughSpan(), false);
+                end(output, Strike.class, false, new StrikethroughSpan());
             }
         }
     }
@@ -99,7 +166,10 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
-    private void end(Editable output, Class kind, Object repl, boolean paragraphStyle) {
+    /**
+     * Modified from {@link android.text.Html}
+     */
+    private void end(Editable output, Class kind, boolean paragraphStyle, Object... replaces) {
         Object obj = getLast(output, kind);
         // start of the tag
         int where = output.getSpanStart(obj);
@@ -109,24 +179,27 @@ public class HtmlTagHandler implements Html.TagHandler {
         output.removeSpan(obj);
 
         if (where != len) {
+            int thisLen = len;
             // paragraph styles like AlignmentSpan need to end with a new line!
             if (paragraphStyle) {
                 output.append("\n");
-                len++;
+                thisLen++;
             }
-            output.setSpan(repl, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
+            for (Object replace : replaces) {
+                output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
 
-        if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "where: " + where);
-            Log.d(HtmlTextView.TAG, "len: " + len);
+            if (HtmlTextView.DEBUG) {
+                Log.d(HtmlTextView.TAG, "where: " + where);
+                Log.d(HtmlTextView.TAG, "thisLen: " + thisLen);
+            }
         }
     }
 
     /**
      * Get last marked position of a specific tag kind (private class)
      */
-    private Object getLast(Editable text, Class kind) {
+    private static Object getLast(Editable text, Class kind) {
         Object[] objs = text.getSpans(0, text.length(), kind);
         if (objs.length == 0) {
             return null;
@@ -140,24 +213,4 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
-    private void handleListTag(Editable output) {
-        if (mListParents.lastElement().equals("ul")) {
-            output.append("\n");
-            String[] split = output.toString().split("\n");
-
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.setSpan(new BulletSpan(15 * mListParents.size()), start, output.length(), 0);
-        } else if (mListParents.lastElement().equals("ol")) {
-            mListItemCount++;
-
-            output.append("\n");
-            String[] split = output.toString().split("\n");
-
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.insert(start, mListItemCount + ". ");
-            output.setSpan(new LeadingMarginSpan.Standard(15 * mListParents.size()), start, output.length(), 0);
-        }
-    }
 } 
