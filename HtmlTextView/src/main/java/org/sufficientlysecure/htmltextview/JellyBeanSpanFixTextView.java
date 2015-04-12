@@ -128,8 +128,8 @@ public class JellyBeanSpanFixTextView extends TextView {
                                                         int widthMeasureSpec, int heightMeasureSpec) {
 
         Object[] spans = builder.getSpans(0, builder.length(), Object.class);
-        List<Object> spansWithSpacesBefore = new ArrayList<Object>(spans.length);
-        List<Object> spansWithSpacesAfter = new ArrayList<Object>(spans.length);
+        List<Object> spansWithSpacesBefore = new ArrayList<>(spans.length);
+        List<Object> spansWithSpacesAfter = new ArrayList<>(spans.length);
 
         for (Object span : spans) {
             int spanStart = builder.getSpanStart(span);
@@ -147,7 +147,7 @@ public class JellyBeanSpanFixTextView extends TextView {
             try {
                 setTextAndMeasure(builder, widthMeasureSpec, heightMeasureSpec);
                 return FixingResult.fixed(spansWithSpacesBefore, spansWithSpacesAfter);
-            } catch (IndexOutOfBoundsException notFixed) {
+            } catch (IndexOutOfBoundsException ignored) {
             }
         }
         if (HtmlTextView.DEBUG) {
@@ -157,15 +157,12 @@ public class JellyBeanSpanFixTextView extends TextView {
     }
 
     private boolean isNotSpace(CharSequence text, int where) {
-        if (where < 0) {
-            return true;
-        }
-        return text.charAt(where) != ' ';
+        return where < 0 || text.charAt(where) != ' ';
     }
 
     private void setTextAndMeasure(CharSequence text, int widthMeasureSpec, int heightMeasureSpec) {
         setText(text);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        super.measure(widthMeasureSpec, heightMeasureSpec);
     }
 
     private void removeUnneededSpaces(int widthMeasureSpec, int heightMeasureSpec,
@@ -197,7 +194,7 @@ public class JellyBeanSpanFixTextView extends TextView {
 
         if (needReset) {
             setText(builder);
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            super.measure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
