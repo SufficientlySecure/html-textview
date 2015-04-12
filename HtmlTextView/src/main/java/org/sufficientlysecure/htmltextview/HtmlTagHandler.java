@@ -37,7 +37,7 @@ import android.util.Log;
  */
 public class HtmlTagHandler implements Html.TagHandler {
     private int mListItemCount = 0;
-    private Vector<String> mListParents = new Vector<String>();
+    private Vector<String> mListParents = new Vector<>();
 
     private static class Code {
     }
@@ -89,9 +89,6 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     /**
      * Mark the opening tag by using private classes
-     *
-     * @param output
-     * @param mark
      */
     private void start(Editable output, Object mark) {
         int len = output.length();
@@ -128,10 +125,6 @@ public class HtmlTagHandler implements Html.TagHandler {
 
     /**
      * Get last marked position of a specific tag kind (private class)
-     *
-     * @param text
-     * @param kind
-     * @return
      */
     private Object getLast(Editable text, Class kind) {
         Object[] objs = text.getSpans(0, text.length(), kind);
