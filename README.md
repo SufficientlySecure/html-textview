@@ -3,37 +3,6 @@
 HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.
 It is a replacement for usage of the WebView component, which behaves strange on some Android versions, flickers while loading, etc.
 
-## Tags supported by Android ([history of Html class](https://github.com/android/platform_frameworks_base/commits/master/core/java/android/text/Html.java))
-* ``<p>``
-* ``<div>`` handled exactly like ``<p>``
-* ``<br>``
-* ``<b>``
-* ``<i>``
-* ``<strong>`` ([bug on some Android versions: generates italic](https://code.google.com/p/android/issues/detail?id=3473))
-* ``<em>`` ([bug on some Android versions: generates bold](https://code.google.com/p/android/issues/detail?id=3473))
-* ``<u>``
-* ``<tt>``
-* ``<dfn>``
-* ``<sub>``
-* ``<sup>``
-* ``<blockquote>``
-* ``<cite>``
-* ``<big>``
-* ``<small>``
-* ``<font size="..." color="..." face="...">``
-* ``<h1>``, ``<h2>``, ``<h3>``, ``<h4>``, ``<h5>``, ``<h6>``
-* ``<a href="...">``
-* ``<img src="...">``
-
-## Extended support by HtmlTextView
-* ``<ul>``
-* ``<ol>``
-* ``<dd>``
-* ``<li>``
-* ``<code>``
-* ``<center>``
-* ``<strike>``
-
 The library also includes a workaround to prevent TextView from crashing on [specific Android versions](http://code.google.com/p/android/issues/detail?id=35466) and the possibility to load images from local drawables folder or from the Internet.
 
 This library is kept tiny without external dependencies.
@@ -84,10 +53,38 @@ HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 text.setHtmlFromRawResource(this, R.raw.help, true);
 ```
 
-## Use library as Gradle dependency (Android library project)
+## Supported HTML tags
 
-1. Copy the cloned folder to your project and define it in your ``settings.gradle`` with ``include ':html-textview'``
-2. Add dependency ``compile project(':html-textview')`` to your project's ``build.gradle``.
+### Tags supported by Android ([history of Html class](https://github.com/android/platform_frameworks_base/commits/master/core/java/android/text/Html.java))
+* ``<p>``
+* ``<div>`` handled exactly like ``<p>``
+* ``<br>``
+* ``<b>``
+* ``<i>``
+* ``<strong>`` ([bug on some Android versions: generates italic](https://code.google.com/p/android/issues/detail?id=3473))
+* ``<em>`` ([bug on some Android versions: generates bold](https://code.google.com/p/android/issues/detail?id=3473))
+* ``<u>``
+* ``<tt>``
+* ``<dfn>``
+* ``<sub>``
+* ``<sup>``
+* ``<blockquote>``
+* ``<cite>``
+* ``<big>``
+* ``<small>``
+* ``<font size="..." color="..." face="...">``
+* ``<h1>``, ``<h2>``, ``<h3>``, ``<h4>``, ``<h5>``, ``<h6>``
+* ``<a href="...">``
+* ``<img src="...">``
+
+### Extended support by HtmlTextView
+* ``<ul>``
+* ``<ol>``
+* ``<dd>``
+* ``<li>``
+* ``<code>``
+* ``<center>``
+* ``<strike>``
 
 ## License
 Apache License v2
