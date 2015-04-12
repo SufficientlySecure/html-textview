@@ -39,6 +39,20 @@ The library also includes a workaround to prevent TextView from crashing on [spe
 This library is kept tiny without external dependencies.
 I am using it to provide Help/About Activities in my apps.
 
+## How to import
+
+Add this to your build.gradle:
+
+```
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.sufficientlysecure:html-textview:1.0'
+}
+```
+
 ## Example
 
 ```java
