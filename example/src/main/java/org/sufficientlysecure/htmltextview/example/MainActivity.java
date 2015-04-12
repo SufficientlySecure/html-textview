@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
 
         HtmlTextView text = (HtmlTextView) findViewById(R.id.html_text);
 
-        text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul>", false);
+        text.setHtmlFromString("<h2>Hello world</h2><ul><li>cats</li><li>dogs</li></ul><br/><img src=\"cat\"/>", true);
     }
 
 }
