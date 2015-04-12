@@ -1,16 +1,14 @@
-apply plugin: 'android-library'
-
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    
-    defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 19
+buildscript {
+    repositories {
+        jcenter()
     }
-    
-    // Do not abort build if lint finds errors
-    lintOptions {
-        abortOnError false
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
     }
 }
