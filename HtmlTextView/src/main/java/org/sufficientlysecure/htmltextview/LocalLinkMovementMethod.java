@@ -28,9 +28,8 @@ import android.widget.TextView;
 /**
  * Copied from http://stackoverflow.com/questions/8558732
  */
-public  class LocalLinkMovementMethod extends LinkMovementMethod {
+public class LocalLinkMovementMethod extends LinkMovementMethod {
     static LocalLinkMovementMethod sInstance;
-
 
     public static LocalLinkMovementMethod getInstance() {
         if (sInstance == null)
@@ -69,8 +68,8 @@ public  class LocalLinkMovementMethod extends LinkMovementMethod {
                             buffer.getSpanEnd(link[0]));
                 }
 
-                if (widget instanceof HtmlTextView){
-                    ((HtmlTextView) widget).linkHit = true;
+                if (widget instanceof HtmlTextView) {
+                    ((HtmlTextView) widget).mLinkHit = true;
                 }
                 return true;
             } else {

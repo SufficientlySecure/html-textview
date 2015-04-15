@@ -20,6 +20,7 @@ package org.sufficientlysecure.htmltextview;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -40,6 +41,8 @@ import android.widget.TextView;
  * happen once per text change.
  * <p/>
  * See http://code.google.com/p/android/issues/detail?id=35466
+ * <p/>
+ * From https://gist.github.com/pyricau/3424004 with fix from comments
  */
 public class JellyBeanSpanFixTextView extends TextView {
 
@@ -128,8 +131,8 @@ public class JellyBeanSpanFixTextView extends TextView {
                                                         int widthMeasureSpec, int heightMeasureSpec) {
 
         Object[] spans = builder.getSpans(0, builder.length(), Object.class);
-        List<Object> spansWithSpacesBefore = new ArrayList<Object>(spans.length);
-        List<Object> spansWithSpacesAfter = new ArrayList<Object>(spans.length);
+        List<Object> spansWithSpacesBefore = new ArrayList<>(spans.length);
+        List<Object> spansWithSpacesAfter = new ArrayList<>(spans.length);
 
         for (Object span : spans) {
             int spanStart = builder.getSpanStart(span);
@@ -147,7 +150,7 @@ public class JellyBeanSpanFixTextView extends TextView {
             try {
                 setTextAndMeasure(builder, widthMeasureSpec, heightMeasureSpec);
                 return FixingResult.fixed(spansWithSpacesBefore, spansWithSpacesAfter);
-            } catch (IndexOutOfBoundsException notFixed) {
+            } catch (IndexOutOfBoundsException ignored) {
             }
         }
         if (HtmlTextView.DEBUG) {
@@ -157,17 +160,16 @@ public class JellyBeanSpanFixTextView extends TextView {
     }
 
     private boolean isNotSpace(CharSequence text, int where) {
-        if (where < 0) {
-            return true;
-        }
-        return text.charAt(where) != ' ';
+        return where < 0 || where >= text.length() || text.charAt(where) != ' ';
     }
 
+    @SuppressLint("WrongCall")
     private void setTextAndMeasure(CharSequence text, int widthMeasureSpec, int heightMeasureSpec) {
         setText(text);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    @SuppressLint("WrongCall")
     private void removeUnneededSpaces(int widthMeasureSpec, int heightMeasureSpec,
                                       SpannableStringBuilder builder, FixingResult result) {
 

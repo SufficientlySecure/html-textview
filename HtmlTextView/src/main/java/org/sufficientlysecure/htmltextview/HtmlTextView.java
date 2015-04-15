@@ -27,8 +27,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
-    boolean dontConsumeNonUrlClicks = true;
-    boolean linkHit;
+    boolean mDontConsumeNonUrlClicks = true;
+    boolean mLinkHit;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -44,9 +44,6 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     /**
      * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
-     *
-     * @param is
-     * @return
      */
     static private String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
@@ -55,13 +52,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        linkHit = false;
+        mLinkHit = false;
         boolean res = super.onTouchEvent(event);
 
-        if (dontConsumeNonUrlClicks)
-            return linkHit;
+        if (mDontConsumeNonUrlClicks) {
+            return mLinkHit;
+        }
         return res;
-
     }
 
     /**
@@ -69,7 +66,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * This allows translatable resource (e.g., res/raw-de/ for german).
      * The containing HTML is parsed to Android's Spannable format and then displayed.
      *
-     * @param context
+     * @param context Context
      * @param id      for example: R.raw.help
      */
     public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables) {
