@@ -59,11 +59,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param context
      * @param id      for example: R.raw.help
      */
-    public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables) {
+    public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables, String baseUrl) {
         // load html from html file from /res/raw
         InputStream inputStreamText = context.getResources().openRawResource(id);
 
-        setHtmlFromString(convertStreamToString(inputStreamText), useLocalDrawables);
+        setHtmlFromString(convertStreamToString(inputStreamText), useLocalDrawables, baseUrl);
     }
 
     /**
@@ -71,12 +71,12 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *
      * @param html String containing HTML, for example: "<b>Hello world!</b>"
      */
-    public void setHtmlFromString(String html, boolean useLocalDrawables) {
+    public void setHtmlFromString(String html, boolean useLocalDrawables, String baseUrl) {
         Html.ImageGetter imgGetter;
         if (useLocalDrawables) {
             imgGetter = new LocalImageGetter(getContext());
         } else {
-            imgGetter = new UrlImageGetter(this, getContext());
+            imgGetter = new UrlImageGetter(this, getContext(), baseUrl);
         }
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
         setText(Html.fromHtml(html, imgGetter, new HtmlTagHandler()));

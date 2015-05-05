@@ -30,11 +30,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class UrlImageGetter implements ImageGetter {
     Context c;
     View container;
+    URI baseUri;
 
     /**
      * Construct the URLImageParser which will execute AsyncTask and refresh the container
@@ -42,9 +44,10 @@ public class UrlImageGetter implements ImageGetter {
      * @param t
      * @param c
      */
-    public UrlImageGetter(View t, Context c) {
+    public UrlImageGetter(View t, Context c, String baseUrl) {
         this.c = c;
         this.container = t;
+        this.baseUri = URI.create(baseUrl);
     }
 
     public Drawable getDrawable(String source) {
@@ -101,9 +104,10 @@ public class UrlImageGetter implements ImageGetter {
             }
         }
 
-        private InputStream fetch(String urlString) throws MalformedURLException, IOException {
+        private InputStream fetch(String urlString) throws IOException, URISyntaxException {
+            URI uri = baseUri.resolve(urlString);
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpGet request = new HttpGet(urlString);
+            HttpGet request = new HttpGet(uri);
             HttpResponse response = httpClient.execute(request);
             return response.getEntity().getContent();
         }
