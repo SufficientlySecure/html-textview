@@ -18,8 +18,8 @@ package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.io.InputStream;
 
@@ -27,6 +27,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
+    boolean mDontConsumeNonUrlClicks = true;
+    boolean mLinkHit;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -42,13 +44,21 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     /**
      * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
-     *
-     * @param is
-     * @return
      */
     static private String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mLinkHit = false;
+        boolean res = super.onTouchEvent(event);
+
+        if (mDontConsumeNonUrlClicks) {
+            return mLinkHit;
+        }
+        return res;
     }
 
     /**
@@ -56,7 +66,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * This allows translatable resource (e.g., res/raw-de/ for german).
      * The containing HTML is parsed to Android's Spannable format and then displayed.
      *
-     * @param context
+     * @param context Context
      * @param id      for example: R.raw.help
      */
     public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables, String baseUrl) {
@@ -82,7 +92,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         setText(Html.fromHtml(html, imgGetter, new HtmlTagHandler()));
 
         // make links work
-        setMovementMethod(LinkMovementMethod.getInstance());
+        setMovementMethod(LocalLinkMovementMethod.getInstance());
 
         // no flickering when clicking textview for Android < 4, but overriders color...
 //        text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark_nodisable));
