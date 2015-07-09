@@ -36,7 +36,7 @@ dependencies {
 HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's drawable folder
-text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", true);
+text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new LocalImageGetter());
 ```
 
 or
@@ -45,7 +45,7 @@ or
 HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
-text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", false);
+text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new RemoteImageGetter());
 ```
 
 or
@@ -54,7 +54,7 @@ or
 HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
-text.setHtmlFromRawResource(this, R.raw.help, true);
+text.setHtmlFromRawResource(this, R.raw.help, new RemoteImageGetter());
 ```
 
 ## Supported HTML tags
@@ -96,9 +96,9 @@ See LICENSE for full license text.
 
 ## Authors
 - This library was put together by Dominik Schürmann
-- Original [TagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/)
-- Original [UrlImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
-- Original [LocalImageGetter](http://stackoverflow.com/a/22298833) developed by drawk
+- Original [HtmlTagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/)
+- Original [HtmlRemoteImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
+- Original [HtmlLocalImageGetter](http://stackoverflow.com/a/22298833) developed by drawk
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
 
 ## Contributions

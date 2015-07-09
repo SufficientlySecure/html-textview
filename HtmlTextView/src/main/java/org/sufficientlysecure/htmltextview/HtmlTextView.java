@@ -19,9 +19,11 @@ package org.sufficientlysecure.htmltextview;
 import android.content.Context;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.io.InputStream;
+import java.util.Scanner;
 
 public class HtmlTextView extends JellyBeanSpanFixTextView {
 
@@ -42,11 +44,28 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         super(context);
     }
 
+    public interface ImageGetter {
+    }
+
+    public static class LocalImageGetter implements ImageGetter {
+    }
+
+    public static class RemoteImageGetter implements ImageGetter {
+        public String baseUrl;
+
+        public RemoteImageGetter() {
+        }
+
+        public RemoteImageGetter(String baseUrl) {
+            this.baseUrl = baseUrl;
+        }
+    }
+
     /**
      * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
      */
-    static private String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+    static private String convertStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 
@@ -67,13 +86,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * The containing HTML is parsed to Android's Spannable format and then displayed.
      *
      * @param context Context
-     * @param id      for example: R.raw.help
+     * @param resId   for example: R.raw.help
      */
-    public void setHtmlFromRawResource(Context context, int id, boolean useLocalDrawables, String baseUrl) {
+    public void setHtmlFromRawResource(Context context, int resId, ImageGetter imageGetter) {
         // load html from html file from /res/raw
-        InputStream inputStreamText = context.getResources().openRawResource(id);
+        InputStream inputStreamText = context.getResources().openRawResource(resId);
 
-        setHtmlFromString(convertStreamToString(inputStreamText), useLocalDrawables, baseUrl);
+        setHtmlFromString(convertStreamToString(inputStreamText), imageGetter);
     }
 
     /**
@@ -81,15 +100,20 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *
      * @param html String containing HTML, for example: "<b>Hello world!</b>"
      */
-    public void setHtmlFromString(String html, boolean useLocalDrawables, String baseUrl) {
-        Html.ImageGetter imgGetter;
-        if (useLocalDrawables) {
-            imgGetter = new LocalImageGetter(getContext());
+    public void setHtmlFromString(String html, ImageGetter imageGetter) {
+        Html.ImageGetter htmlImgageGetter;
+        if (imageGetter instanceof LocalImageGetter) {
+            htmlImgageGetter = new HtmlLocalImageGetter(getContext());
+        } else if (imageGetter instanceof RemoteImageGetter) {
+            htmlImgageGetter = new HtmlRemoteImageGetter(this, getContext(),
+                    ((RemoteImageGetter) imageGetter).baseUrl);
         } else {
-            imgGetter = new UrlImageGetter(this, getContext(), baseUrl);
+            Log.e(TAG, "Wrong imageGetter!");
+            return;
         }
+
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
-        setText(Html.fromHtml(html, imgGetter, new HtmlTagHandler()));
+        setText(Html.fromHtml(html, htmlImgageGetter, new HtmlTagHandler()));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
@@ -97,4 +121,27 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         // no flickering when clicking textview for Android < 4, but overriders color...
 //        text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark_nodisable));
     }
+
+    /**
+     * @deprecated
+     */
+    public void setHtmlFromRawResource(Context context, int resId, boolean useLocalDrawables) {
+        if (useLocalDrawables) {
+            setHtmlFromRawResource(context, resId, new LocalImageGetter());
+        } else {
+            setHtmlFromRawResource(context, resId, new RemoteImageGetter());
+        }
+    }
+
+    /**
+     * @deprecated
+     */
+    public void setHtmlFromString(String html, boolean useLocalDrawables) {
+        if (useLocalDrawables) {
+            setHtmlFromString(html, new LocalImageGetter());
+        } else {
+            setHtmlFromString(html, new RemoteImageGetter());
+        }
+    }
+
 }

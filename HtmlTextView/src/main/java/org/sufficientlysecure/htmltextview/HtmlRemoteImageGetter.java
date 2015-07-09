@@ -22,32 +22,28 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.Html.ImageGetter;
+import android.util.Log;
 import android.view.View;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 
-public class UrlImageGetter implements ImageGetter {
+public class HtmlRemoteImageGetter implements ImageGetter {
     Context c;
     View container;
     URI baseUri;
 
     /**
      * Construct the URLImageParser which will execute AsyncTask and refresh the container
-     *
-     * @param t
-     * @param c
      */
-    public UrlImageGetter(View t, Context c, String baseUrl) {
+    public HtmlRemoteImageGetter(View t, Context c, String baseUrl) {
         this.c = c;
         this.container = t;
-        this.baseUri = URI.create(baseUrl);
+        if (baseUrl != null) {
+            this.baseUri = URI.create(baseUrl);
+        }
     }
 
     public Drawable getDrawable(String source) {
@@ -64,6 +60,7 @@ public class UrlImageGetter implements ImageGetter {
 
     public class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable> {
         UrlDrawable urlDrawable;
+        String source;
 
         public ImageGetterAsyncTask(UrlDrawable d) {
             this.urlDrawable = d;
@@ -71,12 +68,16 @@ public class UrlImageGetter implements ImageGetter {
 
         @Override
         protected Drawable doInBackground(String... params) {
-            String source = params[0];
+            source = params[0];
             return fetchDrawable(source);
         }
 
         @Override
         protected void onPostExecute(Drawable result) {
+            if (result == null) {
+                Log.w(HtmlTextView.TAG, "Drawable result is null! (source: " + source + ")");
+                return;
+            }
             // set the correct bound according to the result from HTTP call
             urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 + result.getIntrinsicHeight());
 
@@ -84,14 +85,11 @@ public class UrlImageGetter implements ImageGetter {
             urlDrawable.drawable = result;
 
             // redraw the image by invalidating the container
-            UrlImageGetter.this.container.invalidate();
+            HtmlRemoteImageGetter.this.container.invalidate();
         }
 
         /**
          * Get the Drawable from URL
-         *
-         * @param urlString
-         * @return
          */
         public Drawable fetchDrawable(String urlString) {
             try {
@@ -104,12 +102,15 @@ public class UrlImageGetter implements ImageGetter {
             }
         }
 
-        private InputStream fetch(String urlString) throws IOException, URISyntaxException {
-            URI uri = baseUri.resolve(urlString);
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpGet request = new HttpGet(uri);
-            HttpResponse response = httpClient.execute(request);
-            return response.getEntity().getContent();
+        private InputStream fetch(String urlString) throws IOException {
+            URL url;
+            if (baseUri != null) {
+                url = baseUri.resolve(urlString).toURL();
+            } else {
+                url = URI.create(urlString).toURL();
+            }
+
+            return (InputStream) url.getContent();
         }
     }
 

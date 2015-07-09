@@ -25,10 +25,10 @@ import android.util.Log;
 /**
  * Copied from http://stackoverflow.com/a/22298833
  */
-public class LocalImageGetter implements Html.ImageGetter {
+public class HtmlLocalImageGetter implements Html.ImageGetter {
     Context c;
 
-    public LocalImageGetter(Context c) {
+    public HtmlLocalImageGetter(Context c) {
         this.c = c;
     }
 
