@@ -16,7 +16,6 @@
 
 package org.sufficientlysecure.htmltextview;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,19 +26,18 @@ import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URL;
 
 public class HtmlRemoteImageGetter implements ImageGetter {
-    Context c;
     View container;
     URI baseUri;
 
     /**
      * Construct the URLImageParser which will execute AsyncTask and refresh the container
      */
-    public HtmlRemoteImageGetter(View t, Context c, String baseUrl) {
-        this.c = c;
+    public HtmlRemoteImageGetter(View t, String baseUrl) {
         this.container = t;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
@@ -50,7 +48,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
-        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable);
+        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this);
 
         asyncTask.execute(source);
 
@@ -58,12 +56,21 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         return urlDrawable;
     }
 
-    public class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable> {
-        UrlDrawable urlDrawable;
-        String source;
+    /**
+     * Static inner {@link AsyncTask} that keeps a {@link WeakReference} to the {@link UrlDrawable}
+     * and {@link HtmlRemoteImageGetter}.
+     * <p>
+     * This way, if the AsyncTask has a longer life span than the UrlDrawable,
+     * we won't leak the UrlDrawable or the HtmlRemoteImageGetter.
+     */
+    private static class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable> {
+        private final WeakReference<UrlDrawable> drawableReference;
+        private final WeakReference<HtmlRemoteImageGetter> imageGetterReference;
+        private String source;
 
-        public ImageGetterAsyncTask(UrlDrawable d) {
-            this.urlDrawable = d;
+        public ImageGetterAsyncTask(UrlDrawable d, HtmlRemoteImageGetter imageGetter) {
+            this.drawableReference = new WeakReference<>(d);
+            this.imageGetterReference = new WeakReference<>(imageGetter);
         }
 
         @Override
@@ -78,14 +85,22 @@ public class HtmlRemoteImageGetter implements ImageGetter {
                 Log.w(HtmlTextView.TAG, "Drawable result is null! (source: " + source + ")");
                 return;
             }
+            final UrlDrawable urlDrawable = drawableReference.get();
+            if (urlDrawable == null) {
+                return;
+            }
             // set the correct bound according to the result from HTTP call
             urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 + result.getIntrinsicHeight());
 
             // change the reference of the current drawable to the result from the HTTP call
             urlDrawable.drawable = result;
 
+            final HtmlRemoteImageGetter imageGetter = imageGetterReference.get();
+            if (imageGetter == null) {
+                return;
+            }
             // redraw the image by invalidating the container
-            HtmlRemoteImageGetter.this.container.invalidate();
+            imageGetter.container.invalidate();
         }
 
         /**
@@ -104,8 +119,12 @@ public class HtmlRemoteImageGetter implements ImageGetter {
 
         private InputStream fetch(String urlString) throws IOException {
             URL url;
-            if (baseUri != null) {
-                url = baseUri.resolve(urlString).toURL();
+            final HtmlRemoteImageGetter imageGetter = imageGetterReference.get();
+            if (imageGetter == null) {
+                return null;
+            }
+            if (imageGetter.baseUri != null) {
+                url = imageGetter.baseUri.resolve(urlString).toURL();
             } else {
                 url = URI.create(urlString).toURL();
             }
