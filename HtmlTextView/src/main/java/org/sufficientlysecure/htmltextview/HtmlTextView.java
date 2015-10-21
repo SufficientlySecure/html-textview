@@ -101,11 +101,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param html String containing HTML, for example: "<b>Hello world!</b>"
      */
     public void setHtmlFromString(String html, ImageGetter imageGetter) {
-        Html.ImageGetter htmlImgageGetter;
+        Html.ImageGetter htmlImageGetter;
         if (imageGetter instanceof LocalImageGetter) {
-            htmlImgageGetter = new HtmlLocalImageGetter(getContext());
+            htmlImageGetter = new HtmlLocalImageGetter(getContext());
         } else if (imageGetter instanceof RemoteImageGetter) {
-            htmlImgageGetter = new HtmlRemoteImageGetter(this, getContext(),
+            htmlImageGetter = new HtmlRemoteImageGetter(this,
                     ((RemoteImageGetter) imageGetter).baseUrl);
         } else {
             Log.e(TAG, "Wrong imageGetter!");
@@ -113,7 +113,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         }
 
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
-        setText(Html.fromHtml(html, htmlImgageGetter, new HtmlTagHandler()));
+        setText(Html.fromHtml(html, htmlImageGetter, new HtmlTagHandler()));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
