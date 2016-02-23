@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:1.3'
+    compile 'org.sufficientlysecure:html-textview:1.4'
 }
 ```
 
@@ -89,6 +89,24 @@ text.setHtmlFromRawResource(this, R.raw.help, new RemoteImageGetter());
 * ``<center>``
 * ``<strike>``
 
+### Support for HTML tables
+HtmlTextView now supports HTML tables (to a limited extent) by condensing the text into a link which developers are able to render in a native WebView. To take advantage of the feature you'll need to:
+
+1. implement a `ClickableTableSpan` which provides access to the table HTML (which can be forwarded to a WebView)
+
+2. provide a `DrawTableLinkSpan` which defines what the table link should look like (i.e. text, text color, text size)
+
+Take a look at the project's [sample app](https://github.com/SufficientlySecure/html-textview/blob/master/example/src/main/java/org/sufficientlysecure/htmltextview/example/MainActivity.java) for an example.
+
+We recognize the standard table tags:
+
+* ``<table>``
+* ``<tr>``
+* ``<th>``
+* ``<td>``
+
+as well as the tags extended by HtmlTextView. However, support doesn’t currently extend to tags natively supported by Android (e.g. ``<b>``, ``<big>``, ``<h1>``) which means tables will not include the extra styling.
+
 ## License
 Apache License v2
 
@@ -100,6 +118,7 @@ See LICENSE for full license text.
 - Original [HtmlRemoteImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
 - Original [HtmlLocalImageGetter](http://stackoverflow.com/a/22298833) developed by drawk
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
+- [Table support](https://github.com/SufficientlySecure/html-textview/pull/33) added by Richard Thai
 
 ## Contributions
 
