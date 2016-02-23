@@ -31,6 +31,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public static final boolean DEBUG = false;
     boolean mDontConsumeNonUrlClicks = true;
     boolean mLinkHit;
+    private ClickableTableSpan mClickableTableSpan;
+    private DrawTableLinkSpan mDrawTableLinkSpan;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -113,13 +115,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         }
 
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
-        setText(Html.fromHtml(html, htmlImageGetter, new HtmlTagHandler()));
+        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
+        htmlTagHandler.setClickableTableSpan(mClickableTableSpan);
+        htmlTagHandler.setDrawTableLinkSpan(mDrawTableLinkSpan);
+        setText(Html.fromHtml(html, htmlImageGetter, htmlTagHandler));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
-
-        // no flickering when clicking textview for Android < 4, but overriders color...
-//        text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark_nodisable));
     }
 
     /**
@@ -144,4 +146,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         }
     }
 
+    public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
+        this.mClickableTableSpan = clickableTableSpan;
+    }
+
+    public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
+        this.mDrawTableLinkSpan = drawTableLinkSpan;
+    }
 }

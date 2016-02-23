@@ -52,9 +52,30 @@ public class HtmlTagHandler implements Html.TagHandler {
     /**
      * List indentation in pixels. Nested lists use multiple of this.
      */
+    /**
+     * Running HTML table string based off of the root table tag. Root table tag being the tag which
+     * isn't embedded within any other table tag. Example:
+     * <!-- This is the root level opening table tag. This is where we keep track of tables. -->
+     * <table>
+     *     ...
+     *     <table> <!-- Non-root table tags -->
+     *     ...
+     *     </table>
+     *     ...
+     * </table>
+     * <!-- This is the root level closing table tag and the end of the string we track. -->
+     */
+    StringBuilder tableHtmlBuilder = new StringBuilder();
+    /**
+     * Tells us which level of table tag we're on; ultimately used to find the root table tag.
+     */
+    int tableTagLevel = 0;
+
     private static final int indent = 10;
     private static final int listItemIndent = indent * 2;
     private static final BulletSpan bullet = new BulletSpan(indent);
+    private ClickableTableSpan mClickableTableSpan;
+    private DrawTableLinkSpan mDrawTableLinkSpan;
 
     private static class Ul {
     }
@@ -69,6 +90,18 @@ public class HtmlTagHandler implements Html.TagHandler {
     }
 
     private static class Strike {
+    }
+
+    private static class Table {
+    }
+
+    private static class Tr {
+    }
+
+    private static class Th {
+    }
+
+    private static class Td {
     }
 
     @Override
@@ -102,6 +135,23 @@ public class HtmlTagHandler implements Html.TagHandler {
                 start(output, new Center());
             } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
                 start(output, new Strike());
+            } else if (tag.equalsIgnoreCase("table")) {
+                start(output, new Table());
+                if (tableTagLevel == 0) {
+                    tableHtmlBuilder = new StringBuilder();
+                    // We need some text for the table to be replaced by the span because
+                    // the other tags will remove their text when their text is extracted
+                    output.append("table placeholder");
+                }
+
+                tableTagLevel++;
+            }
+            else if (tag.equalsIgnoreCase("tr")) {
+                start(output, new Tr());
+            } else if (tag.equalsIgnoreCase("th")) {
+                start(output, new Th());
+            } else if (tag.equalsIgnoreCase("td")) {
+                start(output, new Td());
             }
         } else {
             // closing tag
@@ -150,7 +200,54 @@ public class HtmlTagHandler implements Html.TagHandler {
                 end(output, Center.class, true, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER));
             } else if (tag.equalsIgnoreCase("s") || tag.equalsIgnoreCase("strike")) {
                 end(output, Strike.class, false, new StrikethroughSpan());
+            } else if (tag.equalsIgnoreCase("table")) {
+                tableTagLevel--;
+
+                // When we're back at the root-level table
+                if (tableTagLevel == 0) {
+                    final String tableHtml = tableHtmlBuilder.toString();
+
+                    ClickableTableSpan clickableTableSpan = null;
+                    if (mClickableTableSpan != null) {
+                        clickableTableSpan = mClickableTableSpan.newInstance();
+                        clickableTableSpan.setTableHtml(tableHtml);
+                    }
+
+                    DrawTableLinkSpan drawTableLinkSpan = null;
+                    if (mDrawTableLinkSpan != null) {
+                        drawTableLinkSpan = mDrawTableLinkSpan.newInstance();
+                    }
+
+                    end(output, Table.class, false, drawTableLinkSpan, clickableTableSpan);
+                } else {
+                    end(output, Table.class, false);
+                }
             }
+            else if (tag.equalsIgnoreCase("tr")) {
+                end(output, Tr.class, false);
+            } else if (tag.equalsIgnoreCase("th")) {
+                end(output, Th.class, false);
+            } else if (tag.equalsIgnoreCase("td")) {
+                end(output, Td.class, false);
+            }
+        }
+
+        storeTableTags(opening, tag);
+    }
+
+    /**
+     * If we're arriving at a table tag or are already within a table tag, then we should store it
+     * the raw HTML for our ClickableTableSpan
+     */
+    private void storeTableTags(boolean opening, String tag) {
+        if (tableTagLevel > 0 || tag.equalsIgnoreCase("table")) {
+            tableHtmlBuilder.append("<");
+            if (!opening) {
+                tableHtmlBuilder.append("/");
+            }
+            tableHtmlBuilder
+                    .append(tag.toLowerCase())
+                    .append(">");
         }
     }
 
@@ -176,6 +273,12 @@ public class HtmlTagHandler implements Html.TagHandler {
         // end of the tag
         int len = output.length();
 
+        // If we're in a table, then we need to store the raw HTML for later
+        if (tableTagLevel > 0) {
+            final CharSequence extractedSpanText = extractSpanText(output, kind);
+            tableHtmlBuilder.append(extractedSpanText);
+        }
+
         output.removeSpan(obj);
 
         if (where != len) {
@@ -197,6 +300,21 @@ public class HtmlTagHandler implements Html.TagHandler {
     }
 
     /**
+     * Returns the text contained within a span and deletes it from the output string
+     */
+    private CharSequence extractSpanText(Editable output, Class kind) {
+        final Object obj = getLast(output, kind);
+        // start of the tag
+        final int where = output.getSpanStart(obj);
+        // end of the tag
+        final int len = output.length();
+
+        final CharSequence extractedSpanText = output.subSequence(where, len);
+        output.delete(where, len);
+        return extractedSpanText;
+    }
+
+    /**
      * Get last marked position of a specific tag kind (private class)
      */
     private static Object getLast(Editable text, Class kind) {
@@ -213,4 +331,11 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
+    public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
+        this.mClickableTableSpan = clickableTableSpan;
+    }
+
+    public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
+        this.mDrawTableLinkSpan = drawTableLinkSpan;
+    }
 } 
