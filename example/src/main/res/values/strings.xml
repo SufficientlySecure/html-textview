@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">HtmlTextView Example</string>
+    <string name="app_name">HtmlTextView Example</string>
 
     <string name="test_html"><![CDATA[
     <p>

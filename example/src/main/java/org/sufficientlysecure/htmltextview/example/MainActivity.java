@@ -17,36 +17,36 @@ import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_
 
 public class MainActivity extends Activity {
 
-  // The html table(s) are individually passed through to the ClickableTableSpan implementation
-  // presumably for a WebView activity.
-  class ClickableTableSpanImpl extends ClickableTableSpan {
-    @Override
-    public ClickableTableSpan newInstance() {
-      return new ClickableTableSpanImpl();
+    // The html table(s) are individually passed through to the ClickableTableSpan implementation
+    // presumably for a WebView activity.
+    class ClickableTableSpanImpl extends ClickableTableSpan {
+        @Override
+        public ClickableTableSpan newInstance() {
+            return new ClickableTableSpanImpl();
+        }
+
+        @Override
+        public void onClick(View widget) {
+            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+            intent.putExtra(EXTRA_TABLE_HTML, getTableHtml());
+            startActivity(intent);
+        }
     }
 
     @Override
-    public void onClick(View widget) {
-      Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-      intent.putExtra(EXTRA_TABLE_HTML, getTableHtml());
-      startActivity(intent);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        HtmlTextView text = (HtmlTextView) findViewById(R.id.html_text);
+
+        text.setRemoveFromHtmlSpace(true);
+        text.setClickableTableSpan(new ClickableTableSpanImpl());
+        DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
+        drawTableLinkSpan.setTableLinkText("[tap for table]");
+        text.setDrawTableLinkSpan(drawTableLinkSpan);
+        text.setHtmlFromString(getResources().getString(R.string.test_html),
+                new HtmlTextView.LocalImageGetter());
     }
-  }
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    HtmlTextView text = (HtmlTextView) findViewById(R.id.html_text);
-
-    text.setRemoveFromHtmlSpace(true);
-    text.setClickableTableSpan(new ClickableTableSpanImpl());
-    DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
-    drawTableLinkSpan.setTableLinkText("[tap for table]");
-    text.setDrawTableLinkSpan(drawTableLinkSpan);
-    text.setHtmlFromString(getResources().getString(R.string.test_html),
-        new HtmlTextView.LocalImageGetter());
-  }
 
 }
