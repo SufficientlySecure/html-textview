@@ -126,11 +126,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(mClickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(mDrawTableLinkSpan);
-        if (removeFromHtmlSpace)
+        if (removeFromHtmlSpace) {
             setText(removeHtmlBottomPadding(Html.fromHtml(html, htmlImageGetter, htmlTagHandler)));
-        else
+        } else {
             setText(Html.fromHtml(html, htmlImageGetter, htmlTagHandler));
-
+        }
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
     }
@@ -166,10 +166,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     private CharSequence removeHtmlBottomPadding(CharSequence text) {
-        if (text == null)
+        if (text == null) {
             return null;
-        if (text.length() == 0)
+        } else if (text.length() == 0) {
             return text;
+        }
 
         while (text.charAt(text.length() - 1) == '\n') {
             text = text.subSequence(0, text.length() - 1);
