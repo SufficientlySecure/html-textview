@@ -119,6 +119,7 @@ See LICENSE for full license text.
 - Original [HtmlLocalImageGetter](http://stackoverflow.com/a/22298833) developed by drawk
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
 - [Table support](https://github.com/SufficientlySecure/html-textview/pull/33) added by Richard Thai
+- [setRemoveFromHtmlSpace](https://github.com/SufficientlySecure/html-textview/pull/37) added by [Derek Smith](https://github.com/derekcsm)
 
 ## Contributions
 
