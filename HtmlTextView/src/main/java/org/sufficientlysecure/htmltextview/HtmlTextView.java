@@ -31,6 +31,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public static final boolean DEBUG = false;
     boolean mDontConsumeNonUrlClicks = true;
     boolean mLinkHit;
+    private boolean removeFromHtmlSpace = false;
     private ClickableTableSpan mClickableTableSpan;
     private DrawTableLinkSpan mDrawTableLinkSpan;
 
@@ -44,6 +45,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public HtmlTextView(Context context) {
         super(context);
+    }
+
+    /**
+     * Note that this must be called before setting text for it to work
+     */
+    public void setRemoveFromHtmlSpace(boolean removeFromHtmlSpace) {
+        this.removeFromHtmlSpace = removeFromHtmlSpace;
     }
 
     public interface ImageGetter {
@@ -118,8 +126,11 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(mClickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(mDrawTableLinkSpan);
-        setText(Html.fromHtml(html, htmlImageGetter, htmlTagHandler));
-
+        if (removeFromHtmlSpace) {
+            setText(removeHtmlBottomPadding(Html.fromHtml(html, htmlImageGetter, htmlTagHandler)));
+        } else {
+            setText(Html.fromHtml(html, htmlImageGetter, htmlTagHandler));
+        }
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
     }
@@ -152,5 +163,18 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
         this.mDrawTableLinkSpan = drawTableLinkSpan;
+    }
+
+    private CharSequence removeHtmlBottomPadding(CharSequence text) {
+        if (text == null) {
+            return null;
+        } else if (text.length() == 0) {
+            return text;
+        }
+
+        while (text.charAt(text.length() - 1) == '\n') {
+            text = text.subSequence(0, text.length() - 1);
+        }
+        return text;
     }
 }
