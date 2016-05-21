@@ -118,8 +118,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
             htmlImageGetter = new HtmlRemoteImageGetter(this,
                     ((RemoteImageGetter) imageGetter).baseUrl);
         } else {
-            Log.e(TAG, "Wrong imageGetter!");
-            return;
+            htmlImageGetter = imageGetter;
         }
 
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
