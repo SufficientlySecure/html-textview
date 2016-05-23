@@ -121,7 +121,18 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
             Log.e(TAG, "Wrong imageGetter!");
             return;
         }
+        setHtmlFromStringWithHtmlImageGetter(html, htmlImageGetter);
+    }
 
+    /**
+     * Parses String containing HTML to Android's Spannable format and displays it in this TextView.
+     * Using the implementation of Html.ImageGetter provided. This allows using external libraries
+     * for fetching and caching images.
+     *
+     * @param html String containing HTML, for example: "<b>Hello world!</b>"
+     * @param htmlImageGetter for fetching images
+     */
+    public void setHtmlFromStringWithHtmlImageGetter(Sting html, Html.ImageGetter htmlImageGetter) {
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(mClickableTableSpan);
