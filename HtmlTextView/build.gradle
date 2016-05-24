@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 23
-        versionCode 6
-        versionName '1.5'
+        versionCode 7
+        versionName '1.6'
     }
 }
 
@@ -17,7 +17,7 @@ publish {
     userOrg = 'sufficientlysecure'
     groupId = 'org.sufficientlysecure'
     artifactId = 'html-textview'
-    version = '1.5'
+    version = '1.6'
     description = 'HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.'
     website = 'https://github.com/sufficientlysecure/html-textview'
 }
