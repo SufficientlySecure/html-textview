@@ -132,7 +132,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param html String containing HTML, for example: "<b>Hello world!</b>"
      * @param htmlImageGetter for fetching images
      */
-    public void setHtmlFromStringWithHtmlImageGetter(Sting html, Html.ImageGetter htmlImageGetter) {
+    public void setHtmlFromStringWithHtmlImageGetter(String html, Html.ImageGetter htmlImageGetter) {
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(mClickableTableSpan);
