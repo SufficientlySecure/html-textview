@@ -1,9 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#f8f8f8"
-            tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_vertical_margin"/>
+            android:layout_height="@dimen/activity_vertical_margin" />
 
         <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/html_text"
@@ -21,11 +21,11 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@android:color/white"
-            android:textAppearance="@android:style/TextAppearance.Small"/>
+            android:textAppearance="@android:style/TextAppearance.Small" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_vertical_margin"/>
+            android:layout_height="@dimen/activity_vertical_margin" />
 
     </LinearLayout>
 

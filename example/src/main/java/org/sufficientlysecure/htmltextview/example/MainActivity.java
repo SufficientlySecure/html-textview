@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
         drawTableLinkSpan.setTableLinkText("[tap for table]");
         text.setDrawTableLinkSpan(drawTableLinkSpan);
-        text.setHtmlFromString(getResources().getString(R.string.test_html),
-                new HtmlTextView.LocalImageGetter());
+
+        text.setHtmlFromRawResource(this, R.raw.example, new HtmlTextView.LocalImageGetter());
     }
 }
