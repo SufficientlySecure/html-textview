@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2014-2016 Dominik Schürmann <dominik@dominikschuermann.de>
  * Copyright (C) 2013 Antarix Tandon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,11 +37,20 @@ public class HtmlRemoteImageGetter implements ImageGetter {
     URI baseUri;
     boolean matchParentWidth;
 
-    /**
-     * Construct the URLImageParser which will execute AsyncTask and refresh the container
-     */
-    public HtmlRemoteImageGetter(View t, String baseUrl,boolean matchParentWidth) {
-        this.container = t;
+    public HtmlRemoteImageGetter(View htmlTextView) {
+        this.container = htmlTextView;
+        this.matchParentWidth = false;
+    }
+
+    public HtmlRemoteImageGetter(View htmlTextView, String baseUrl) {
+        this.container = htmlTextView;
+        if (baseUrl != null) {
+            this.baseUri = URI.create(baseUrl);
+        }
+    }
+
+    public HtmlRemoteImageGetter(View htmlTextView, String baseUrl, boolean matchParentWidth) {
+        this.container = htmlTextView;
         this.matchParentWidth = matchParentWidth;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
@@ -51,7 +61,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
-        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this,container,matchParentWidth);
+        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container, matchParentWidth);
 
         asyncTask.execute(source);
 
@@ -62,7 +72,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
     /**
      * Static inner {@link AsyncTask} that keeps a {@link WeakReference} to the {@link UrlDrawable}
      * and {@link HtmlRemoteImageGetter}.
-     * <p>
+     * <p/>
      * This way, if the AsyncTask has a longer life span than the UrlDrawable,
      * we won't leak the UrlDrawable or the HtmlRemoteImageGetter.
      */
@@ -74,7 +84,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         private boolean matchParentWidth;
         private float scale;
 
-        public ImageGetterAsyncTask(UrlDrawable d, HtmlRemoteImageGetter imageGetter,View container,boolean matchParentWidth) {
+        public ImageGetterAsyncTask(UrlDrawable d, HtmlRemoteImageGetter imageGetter, View container, boolean matchParentWidth) {
             this.drawableReference = new WeakReference<>(d);
             this.imageGetterReference = new WeakReference<>(imageGetter);
             this.containerReference = new WeakReference<>(container);
@@ -98,7 +108,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
                 return;
             }
             // set the correct bound according to the result from HTTP call
-            urlDrawable.setBounds(0, 0, (int)(result.getIntrinsicWidth()*scale), (int)(result.getIntrinsicHeight()*scale));
+            urlDrawable.setBounds(0, 0, (int) (result.getIntrinsicWidth() * scale), (int) (result.getIntrinsicHeight() * scale));
 
             // change the reference of the current drawable to the result from the HTTP call
             urlDrawable.drawable = result;
@@ -107,9 +117,10 @@ public class HtmlRemoteImageGetter implements ImageGetter {
             if (imageGetter == null) {
                 return;
             }
-            // redraw the image by invalidating the container
-            imageGetter.container.invalidate();
             TextView textView = (TextView) imageGetter.container;
+            // redraw the image by invalidating the container
+            textView.invalidate();
+            // re-set text to fix images overlapping text
             textView.setText(textView.getText());
         }
 
@@ -121,21 +132,23 @@ public class HtmlRemoteImageGetter implements ImageGetter {
                 InputStream is = fetch(urlString);
                 Drawable drawable = Drawable.createFromStream(is, "src");
                 scale = getScale(drawable);
-                drawable.setBounds(0, 0, (int)(drawable.getIntrinsicWidth()*scale), (int)(drawable.getIntrinsicHeight()*scale));
+                drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * scale), (int) (drawable.getIntrinsicHeight() * scale));
                 return drawable;
             } catch (Exception e) {
                 return null;
             }
         }
-        private float getScale(Drawable drawable){
+
+        private float getScale(Drawable drawable) {
             View container = containerReference.get();
-            if(!matchParentWidth ||container == null){
+            if (!matchParentWidth || container == null) {
                 return 1f;
             }
             float maxWidth = container.getWidth();
             float originalDrawableWidth = drawable.getIntrinsicWidth();
-            return maxWidth/originalDrawableWidth;
+            return maxWidth / originalDrawableWidth;
         }
+
         private InputStream fetch(String urlString) throws IOException {
             URL url;
             final HtmlRemoteImageGetter imageGetter = imageGetterReference.get();

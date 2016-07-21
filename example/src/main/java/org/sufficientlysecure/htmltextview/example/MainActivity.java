@@ -7,6 +7,8 @@ import android.view.View;
 
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
+import org.sufficientlysecure.htmltextview.HtmlLocalImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlRemoteImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;
@@ -36,12 +38,12 @@ public class MainActivity extends Activity {
 
         HtmlTextView text = (HtmlTextView) findViewById(R.id.html_text);
 
-        text.setRemoveFromHtmlSpace(true);
+        //text.setRemoveFromHtmlSpace(false); // default is true
         text.setClickableTableSpan(new ClickableTableSpanImpl());
         DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
         drawTableLinkSpan.setTableLinkText("[tap for table]");
         text.setDrawTableLinkSpan(drawTableLinkSpan);
 
-        text.setHtmlFromRawResource(this, R.raw.example, new HtmlTextView.LocalImageGetter());
+        text.setHtml(this, R.raw.example, new HtmlLocalImageGetter(this));
     }
 }

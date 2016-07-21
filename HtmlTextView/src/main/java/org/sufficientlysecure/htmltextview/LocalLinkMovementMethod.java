@@ -69,7 +69,7 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
                 }
 
                 if (widget instanceof HtmlTextView) {
-                    ((HtmlTextView) widget).mLinkHit = true;
+                    ((HtmlTextView) widget).linkHit = true;
                 }
                 return true;
             } else {

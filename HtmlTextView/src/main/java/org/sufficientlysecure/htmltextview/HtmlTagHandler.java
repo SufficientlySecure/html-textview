@@ -57,11 +57,11 @@ public class HtmlTagHandler implements Html.TagHandler {
      * isn't embedded within any other table tag. Example:
      * <!-- This is the root level opening table tag. This is where we keep track of tables. -->
      * <table>
-     *     ...
-     *     <table> <!-- Non-root table tags -->
-     *     ...
-     *     </table>
-     *     ...
+     * ...
+     * <table> <!-- Non-root table tags -->
+     * ...
+     * </table>
+     * ...
      * </table>
      * <!-- This is the root level closing table tag and the end of the string we track. -->
      */
@@ -145,8 +145,7 @@ public class HtmlTagHandler implements Html.TagHandler {
                 }
 
                 tableTagLevel++;
-            }
-            else if (tag.equalsIgnoreCase("tr")) {
+            } else if (tag.equalsIgnoreCase("tr")) {
                 start(output, new Tr());
             } else if (tag.equalsIgnoreCase("th")) {
                 start(output, new Th());
@@ -222,8 +221,7 @@ public class HtmlTagHandler implements Html.TagHandler {
                 } else {
                     end(output, Table.class, false);
                 }
-            }
-            else if (tag.equalsIgnoreCase("tr")) {
+            } else if (tag.equalsIgnoreCase("tr")) {
                 end(output, Tr.class, false);
             } else if (tag.equalsIgnoreCase("th")) {
                 end(output, Th.class, false);

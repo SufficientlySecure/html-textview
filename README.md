@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:1.6'
+    compile 'org.sufficientlysecure:html-textview:1.7'
 }
 ```
 
@@ -33,28 +33,28 @@ dependencies {
 ```
 
 ```java
-HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
+HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's drawable folder
-text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new LocalImageGetter());
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlLocalImageGetter(this));
 ```
 
 or
 
 ```java
-HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
+HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
-text.setHtmlFromString("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new RemoteImageGetter());
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new HtmlRemoteImageGetter(htmlTextView));
 ```
 
 or
 
 ```java
-HtmlTextView text = (HtmlTextView) view.findViewById(R.id.html_text);
+HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
-text.setHtmlFromRawResource(this, R.raw.help, new RemoteImageGetter());
+htmlTextView.setHtml(this, R.raw.help, new HtmlRemoteImageGetter(htmlTextView));
 ```
 
 ## Supported HTML tags
