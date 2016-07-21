@@ -62,12 +62,25 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static class RemoteImageGetter implements ImageGetter {
         public String baseUrl;
+        public boolean matchParentWidth = false;
 
         public RemoteImageGetter() {
         }
 
         public RemoteImageGetter(String baseUrl) {
             this.baseUrl = baseUrl;
+        }
+        public RemoteImageGetter(String baseUrl,boolean matchParentWidth){
+            this(baseUrl);
+            this.matchParentWidth = matchParentWidth;
+        }
+
+        /**
+         *
+         * @param matchParentWidth if true,  image will match parent's width.
+         */
+        public RemoteImageGetter(boolean matchParentWidth){
+            this.matchParentWidth = matchParentWidth;
         }
     }
 
@@ -116,7 +129,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
             htmlImageGetter = new HtmlLocalImageGetter(getContext());
         } else if (imageGetter instanceof RemoteImageGetter) {
             htmlImageGetter = new HtmlRemoteImageGetter(this,
-                    ((RemoteImageGetter) imageGetter).baseUrl);
+                    ((RemoteImageGetter) imageGetter).baseUrl,((RemoteImageGetter) imageGetter).matchParentWidth);
         } else {
             Log.e(TAG, "Wrong imageGetter!");
             return;

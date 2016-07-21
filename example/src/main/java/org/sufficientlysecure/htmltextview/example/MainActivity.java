@@ -1,12 +1,8 @@
 package org.sufficientlysecure.htmltextview.example;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.view.View;
 
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
@@ -48,5 +44,4 @@ public class MainActivity extends Activity {
         text.setHtmlFromString(getResources().getString(R.string.test_html),
                 new HtmlTextView.LocalImageGetter());
     }
-
 }
