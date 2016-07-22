@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HtmlTextView Example</string>
+    <string name="data_binding_activity">View Data Binding Activity</string>
 </resources>
