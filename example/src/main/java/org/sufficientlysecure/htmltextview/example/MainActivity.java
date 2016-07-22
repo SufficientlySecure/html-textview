@@ -19,6 +19,8 @@ package org.sufficientlysecure.htmltextview.example;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
@@ -61,5 +63,20 @@ public class MainActivity extends Activity {
         textView.setDrawTableLinkSpan(drawTableLinkSpan);
 
         textView.setHtml(R.raw.example, new HtmlLocalImageGetter(textView));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_view_data_binding) {
+            startActivity(new Intent(this, DataBindingExampleActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
