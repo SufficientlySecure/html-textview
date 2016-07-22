@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:1.7'
+    compile 'org.sufficientlysecure:html-textview:1.8'
 }
 ```
 
@@ -36,7 +36,7 @@ dependencies {
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's drawable folder
-htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlLocalImageGetter(this));
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlLocalImageGetter(htmlTextView));
 ```
 
 or
@@ -54,7 +54,7 @@ or
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
-htmlTextView.setHtml(this, R.raw.help, new HtmlRemoteImageGetter(htmlTextView));
+htmlTextView.setHtml(R.raw.help, new HtmlRemoteImageGetter(htmlTextView));
 ```
 
 ## Supported HTML tags
