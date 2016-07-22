@@ -24,12 +24,11 @@ import android.text.style.ReplacementSpan;
 /**
  * This span defines how a table should be rendered in the HtmlTextView. The default implementation
  * is a cop-out which replaces the HTML table with some text ("[tap for table]" is the default).
- *
+ * <p/>
  * This is to be used in conjunction with the ClickableTableSpan which will redirect a click to the
  * text some application-defined action (i.e. render the raw HTML in a WebView).
  */
 public class DrawTableLinkSpan extends ReplacementSpan {
-    private int mWidth;
 
     private static final String DEFAULT_TABLE_LINK_TEXT = "";
     private static float DEFAULT_TEXT_SIZE = 80f;
@@ -52,9 +51,9 @@ public class DrawTableLinkSpan extends ReplacementSpan {
 
     @Override
     public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
-        mWidth = (int) paint.measureText(mTableLinkText, 0, mTableLinkText.length());
+        int width = (int) paint.measureText(mTableLinkText, 0, mTableLinkText.length());
         mTextSize = paint.getTextSize();
-        return mWidth;
+        return width;
     }
 
     @Override

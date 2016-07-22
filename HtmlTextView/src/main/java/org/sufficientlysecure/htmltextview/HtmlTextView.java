@@ -50,10 +50,10 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     /**
-     * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(Context, int)
+     * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(int)
      */
-    public void setHtml(Context context, int resId) {
-        setHtml(context, resId, null);
+    public void setHtml(int resId) {
+        setHtml(resId, null);
     }
 
     /**
@@ -68,14 +68,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * This allows translatable resource (e.g., res/raw-de/ for german).
      * The containing HTML is parsed to Android's Spannable format and then displayed.
      *
-     * @param context Context
-     * @param resId   for example: R.raw.help
+     * @param resId       for example: R.raw.help
      * @param imageGetter for fetching images. Possible ImageGetter provided by this library:
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
-    public void setHtml(Context context, int resId, Html.ImageGetter imageGetter) {
+    public void setHtml(int resId, Html.ImageGetter imageGetter) {
         // load html from html file from /res/raw
-        InputStream inputStreamText = context.getResources().openRawResource(resId);
+        InputStream inputStreamText = getContext().getResources().openRawResource(resId);
 
         setHtml(convertStreamToString(inputStreamText), imageGetter);
     }
@@ -166,7 +165,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public void setHtmlFromString(String html, DeprecatedImageGetter imageGetter) {
         Html.ImageGetter htmlImageGetter;
         if (imageGetter instanceof LocalImageGetter) {
-            htmlImageGetter = new HtmlLocalImageGetter(getContext());
+            htmlImageGetter = new HtmlLocalImageGetter(this);
         } else if (imageGetter instanceof RemoteImageGetter) {
             htmlImageGetter = new HtmlRemoteImageGetter(this,
                     ((RemoteImageGetter) imageGetter).baseUrl, ((RemoteImageGetter) imageGetter).matchParentWidth);

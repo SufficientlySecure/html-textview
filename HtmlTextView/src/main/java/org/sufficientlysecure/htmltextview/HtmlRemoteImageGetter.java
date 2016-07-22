@@ -33,24 +33,24 @@ import java.net.URI;
 import java.net.URL;
 
 public class HtmlRemoteImageGetter implements ImageGetter {
-    View container;
+    TextView container;
     URI baseUri;
     boolean matchParentWidth;
 
-    public HtmlRemoteImageGetter(View htmlTextView) {
-        this.container = htmlTextView;
+    public HtmlRemoteImageGetter(TextView textView) {
+        this.container = textView;
         this.matchParentWidth = false;
     }
 
-    public HtmlRemoteImageGetter(View htmlTextView, String baseUrl) {
-        this.container = htmlTextView;
+    public HtmlRemoteImageGetter(TextView textView, String baseUrl) {
+        this.container = textView;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
         }
     }
 
-    public HtmlRemoteImageGetter(View htmlTextView, String baseUrl, boolean matchParentWidth) {
-        this.container = htmlTextView;
+    public HtmlRemoteImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
+        this.container = textView;
         this.matchParentWidth = matchParentWidth;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
@@ -117,11 +117,10 @@ public class HtmlRemoteImageGetter implements ImageGetter {
             if (imageGetter == null) {
                 return;
             }
-            TextView textView = (TextView) imageGetter.container;
             // redraw the image by invalidating the container
-            textView.invalidate();
+            imageGetter.container.invalidate();
             // re-set text to fix images overlapping text
-            textView.setText(textView.getText());
+            imageGetter.container.setText(imageGetter.container.getText());
         }
 
         /**

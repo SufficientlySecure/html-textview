@@ -24,17 +24,17 @@ import android.text.style.ClickableSpan;
  * show it in a WebView).
  */
 public abstract class ClickableTableSpan extends ClickableSpan {
-    protected String mTableHtml;
+    protected String tableHtml;
 
     // This sucks, but we need this so that each table can get its own ClickableTableSpan.
     // Otherwise, we end up removing the clicking from earlier tables.
     public abstract ClickableTableSpan newInstance();
 
     public void setTableHtml(String tableHtml) {
-        this.mTableHtml = tableHtml;
+        this.tableHtml = tableHtml;
     }
 
     public String getTableHtml() {
-        return mTableHtml;
+        return tableHtml;
     }
 }

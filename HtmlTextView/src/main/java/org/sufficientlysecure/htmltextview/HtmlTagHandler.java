@@ -74,8 +74,8 @@ public class HtmlTagHandler implements Html.TagHandler {
     private static final int indent = 10;
     private static final int listItemIndent = indent * 2;
     private static final BulletSpan bullet = new BulletSpan(indent);
-    private ClickableTableSpan mClickableTableSpan;
-    private DrawTableLinkSpan mDrawTableLinkSpan;
+    private ClickableTableSpan clickableTableSpan;
+    private DrawTableLinkSpan drawTableLinkSpan;
 
     private static class Ul {
     }
@@ -206,18 +206,18 @@ public class HtmlTagHandler implements Html.TagHandler {
                 if (tableTagLevel == 0) {
                     final String tableHtml = tableHtmlBuilder.toString();
 
-                    ClickableTableSpan clickableTableSpan = null;
-                    if (mClickableTableSpan != null) {
-                        clickableTableSpan = mClickableTableSpan.newInstance();
-                        clickableTableSpan.setTableHtml(tableHtml);
+                    ClickableTableSpan myClickableTableSpan = null;
+                    if (clickableTableSpan != null) {
+                        myClickableTableSpan = clickableTableSpan.newInstance();
+                        myClickableTableSpan.setTableHtml(tableHtml);
                     }
 
-                    DrawTableLinkSpan drawTableLinkSpan = null;
-                    if (mDrawTableLinkSpan != null) {
-                        drawTableLinkSpan = mDrawTableLinkSpan.newInstance();
+                    DrawTableLinkSpan myDrawTableLinkSpan = null;
+                    if (drawTableLinkSpan != null) {
+                        myDrawTableLinkSpan = drawTableLinkSpan.newInstance();
                     }
 
-                    end(output, Table.class, false, drawTableLinkSpan, clickableTableSpan);
+                    end(output, Table.class, false, myDrawTableLinkSpan, myClickableTableSpan);
                 } else {
                     end(output, Table.class, false);
                 }
@@ -330,10 +330,10 @@ public class HtmlTagHandler implements Html.TagHandler {
     }
 
     public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
-        this.mClickableTableSpan = clickableTableSpan;
+        this.clickableTableSpan = clickableTableSpan;
     }
 
     public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
-        this.mDrawTableLinkSpan = drawTableLinkSpan;
+        this.drawTableLinkSpan = drawTableLinkSpan;
     }
 } 

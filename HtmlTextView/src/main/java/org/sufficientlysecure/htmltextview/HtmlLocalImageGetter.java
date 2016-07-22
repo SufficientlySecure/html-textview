@@ -21,23 +21,25 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Log;
+import android.widget.TextView;
 
 /**
  * Copied from http://stackoverflow.com/a/22298833
  */
 public class HtmlLocalImageGetter implements Html.ImageGetter {
-    Context c;
+    TextView container;
 
-    public HtmlLocalImageGetter(Context c) {
-        this.c = c;
+    public HtmlLocalImageGetter(TextView textView) {
+        this.container = textView;
     }
 
     public Drawable getDrawable(String source) {
-        int id = c.getResources().getIdentifier(source, "drawable", c.getPackageName());
+        Context context = container.getContext();
+        int id = context.getResources().getIdentifier(source, "drawable", context.getPackageName());
 
         if (id == 0) {
             // the drawable resource wasn't found in our package, maybe it is a stock android drawable?
-            id = c.getResources().getIdentifier(source, "drawable", "android");
+            id = context.getResources().getIdentifier(source, "drawable", "android");
         }
 
         if (id == 0) {
@@ -45,7 +47,7 @@ public class HtmlLocalImageGetter implements Html.ImageGetter {
             Log.e(HtmlTextView.TAG, "source could not be found: " + source);
             return null;
         } else {
-            Drawable d = c.getResources().getDrawable(id);
+            Drawable d = context.getResources().getDrawable(id);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
         }
