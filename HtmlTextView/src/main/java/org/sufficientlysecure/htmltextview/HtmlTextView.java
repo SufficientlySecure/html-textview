@@ -17,6 +17,9 @@
 package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RawRes;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,7 +34,9 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public static final boolean DEBUG = false;
 
     boolean linkHit;
+    @Nullable
     private ClickableTableSpan clickableTableSpan;
+    @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
 
     boolean dontConsumeNonUrlClicks = true;
@@ -52,14 +57,14 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     /**
      * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(int)
      */
-    public void setHtml(int resId) {
+    public void setHtml(@RawRes int resId) {
         setHtml(resId, null);
     }
 
     /**
      * @see org.sufficientlysecure.htmltextview.HtmlTextView#setHtml(String)
      */
-    public void setHtml(String html) {
+    public void setHtml(@NonNull String html) {
         setHtml(html, null);
     }
 
@@ -72,7 +77,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param imageGetter for fetching images. Possible ImageGetter provided by this library:
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
-    public void setHtml(int resId, Html.ImageGetter imageGetter) {
+    public void setHtml(@RawRes int resId, @Nullable Html.ImageGetter imageGetter) {
         // load html from html file from /res/raw
         InputStream inputStreamText = getContext().getResources().openRawResource(resId);
 
@@ -87,7 +92,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * @param imageGetter for fetching images. Possible ImageGetter provided by this library:
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
-    public void setHtml(String html, Html.ImageGetter imageGetter) {
+    public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
         // this uses Android's Html class for basic parsing, and HtmlTagHandler
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
@@ -108,18 +113,19 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         this.removeFromHtmlSpace = removeFromHtmlSpace;
     }
 
-    public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
+    public void setClickableTableSpan(@Nullable ClickableTableSpan clickableTableSpan) {
         this.clickableTableSpan = clickableTableSpan;
     }
 
-    public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
+    public void setDrawTableLinkSpan(@Nullable DrawTableLinkSpan drawTableLinkSpan) {
         this.drawTableLinkSpan = drawTableLinkSpan;
     }
 
     /**
      * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
      */
-    static private String convertStreamToString(InputStream is) {
+    @NonNull
+    static private String convertStreamToString(@NonNull InputStream is) {
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
@@ -129,7 +135,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * This methods removes this space again.
      * See https://github.com/SufficientlySecure/html-textview/issues/19
      */
-    static private CharSequence removeHtmlBottomPadding(CharSequence text) {
+    @Nullable
+    static private CharSequence removeHtmlBottomPadding(@Nullable CharSequence text) {
         if (text == null) {
             return null;
         } else if (text.length() == 0) {
@@ -154,7 +161,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     @Deprecated
-    public void setHtmlFromRawResource(Context context, int resId, DeprecatedImageGetter imageGetter) {
+    public void setHtmlFromRawResource(Context context, @RawRes int resId, @NonNull DeprecatedImageGetter imageGetter) {
         // load html from html file from /res/raw
         InputStream inputStreamText = context.getResources().openRawResource(resId);
 
@@ -162,7 +169,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     @Deprecated
-    public void setHtmlFromString(String html, DeprecatedImageGetter imageGetter) {
+    public void setHtmlFromString(@NonNull String html, @NonNull DeprecatedImageGetter imageGetter) {
         Html.ImageGetter htmlImageGetter;
         if (imageGetter instanceof LocalImageGetter) {
             htmlImageGetter = new HtmlLocalImageGetter(this);
@@ -177,7 +184,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     @Deprecated
-    public void setHtmlFromRawResource(Context context, int resId, boolean useLocalDrawables) {
+    public void setHtmlFromRawResource(Context context, @RawRes int resId, boolean useLocalDrawables) {
         if (useLocalDrawables) {
             setHtmlFromRawResource(context, resId, new LocalImageGetter());
         } else {
@@ -186,7 +193,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     @Deprecated
-    public void setHtmlFromString(String html, boolean useLocalDrawables) {
+    public void setHtmlFromString(@NonNull String html, boolean useLocalDrawables) {
         if (useLocalDrawables) {
             setHtmlFromString(html, new LocalImageGetter());
         } else {
