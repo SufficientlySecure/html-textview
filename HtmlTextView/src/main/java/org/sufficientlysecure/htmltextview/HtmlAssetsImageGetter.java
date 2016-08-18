@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Dominik Schürmann <dominik@dominikschuermann.de>
- * Copyright (C) 2014 drawk
+ * Copyright (C) 2016 Daniel Passos <daniel@passos.me>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
