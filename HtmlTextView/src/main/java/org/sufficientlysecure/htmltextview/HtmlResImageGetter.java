@@ -26,10 +26,10 @@ import android.widget.TextView;
 /**
  * Copied from http://stackoverflow.com/a/22298833
  */
-public class HtmlLocalImageGetter implements Html.ImageGetter {
+public class HtmlResImageGetter implements Html.ImageGetter {
     TextView container;
 
-    public HtmlLocalImageGetter(TextView textView) {
+    public HtmlResImageGetter(TextView textView) {
         this.container = textView;
     }
 

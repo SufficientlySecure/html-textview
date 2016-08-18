@@ -25,7 +25,7 @@ import android.view.View;
 
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
-import org.sufficientlysecure.htmltextview.HtmlLocalImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         drawTableLinkSpan.setTableLinkText("[tap for table]");
         textView.setDrawTableLinkSpan(drawTableLinkSpan);
 
-        textView.setHtml(R.raw.example, new HtmlLocalImageGetter(textView));
+        textView.setHtml(R.raw.example, new HtmlResImageGetter(textView));
     }
 
     @Override
