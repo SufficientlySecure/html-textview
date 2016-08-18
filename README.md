@@ -44,6 +44,15 @@ or
 ```java
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
+// loads html from string and displays cat_pic.png from the app's assets folder
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlAssetsImageGetter(htmlTextView));
+```
+
+or
+
+```java
+HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
+
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
 htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new HtmlRemoteImageGetter(htmlTextView));
 ```
