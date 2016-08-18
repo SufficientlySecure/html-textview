@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
-import org.sufficientlysecure.htmltextview.HtmlLocalImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 import org.sufficientlysecure.htmltextview.example.databinding.ActivityDataBindingExampleBinding;
 
@@ -60,7 +60,7 @@ public class DataBindingExampleActivity extends Activity {
      */
     @BindingAdapter({"html"})
     public static void displayHtml(HtmlTextView view, @Nullable String html) {
-        view.setHtml(html, new HtmlLocalImageGetter(view));
+        view.setHtml(html, new HtmlResImageGetter(view));
     }
 
     /**
