@@ -26,7 +26,6 @@ import android.view.View;
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlLocalImageGetter;
-import org.sufficientlysecure.htmltextview.HtmlRemoteImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;

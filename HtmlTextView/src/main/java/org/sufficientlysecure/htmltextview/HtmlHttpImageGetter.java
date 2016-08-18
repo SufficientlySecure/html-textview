@@ -32,24 +32,24 @@ import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URL;
 
-public class HtmlRemoteImageGetter implements ImageGetter {
+public class HtmlHttpImageGetter implements ImageGetter {
     TextView container;
     URI baseUri;
     boolean matchParentWidth;
 
-    public HtmlRemoteImageGetter(TextView textView) {
+    public HtmlHttpImageGetter(TextView textView) {
         this.container = textView;
         this.matchParentWidth = false;
     }
 
-    public HtmlRemoteImageGetter(TextView textView, String baseUrl) {
+    public HtmlHttpImageGetter(TextView textView, String baseUrl) {
         this.container = textView;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
         }
     }
 
-    public HtmlRemoteImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
+    public HtmlHttpImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
         this.container = textView;
         this.matchParentWidth = matchParentWidth;
         if (baseUrl != null) {
@@ -71,20 +71,20 @@ public class HtmlRemoteImageGetter implements ImageGetter {
 
     /**
      * Static inner {@link AsyncTask} that keeps a {@link WeakReference} to the {@link UrlDrawable}
-     * and {@link HtmlRemoteImageGetter}.
+     * and {@link HtmlHttpImageGetter}.
      * <p/>
      * This way, if the AsyncTask has a longer life span than the UrlDrawable,
      * we won't leak the UrlDrawable or the HtmlRemoteImageGetter.
      */
     private static class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable> {
         private final WeakReference<UrlDrawable> drawableReference;
-        private final WeakReference<HtmlRemoteImageGetter> imageGetterReference;
+        private final WeakReference<HtmlHttpImageGetter> imageGetterReference;
         private final WeakReference<View> containerReference;
         private String source;
         private boolean matchParentWidth;
         private float scale;
 
-        public ImageGetterAsyncTask(UrlDrawable d, HtmlRemoteImageGetter imageGetter, View container, boolean matchParentWidth) {
+        public ImageGetterAsyncTask(UrlDrawable d, HtmlHttpImageGetter imageGetter, View container, boolean matchParentWidth) {
             this.drawableReference = new WeakReference<>(d);
             this.imageGetterReference = new WeakReference<>(imageGetter);
             this.containerReference = new WeakReference<>(container);
@@ -113,7 +113,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
             // change the reference of the current drawable to the result from the HTTP call
             urlDrawable.drawable = result;
 
-            final HtmlRemoteImageGetter imageGetter = imageGetterReference.get();
+            final HtmlHttpImageGetter imageGetter = imageGetterReference.get();
             if (imageGetter == null) {
                 return;
             }
@@ -150,7 +150,7 @@ public class HtmlRemoteImageGetter implements ImageGetter {
 
         private InputStream fetch(String urlString) throws IOException {
             URL url;
-            final HtmlRemoteImageGetter imageGetter = imageGetterReference.get();
+            final HtmlHttpImageGetter imageGetter = imageGetterReference.get();
             if (imageGetter == null) {
                 return null;
             }

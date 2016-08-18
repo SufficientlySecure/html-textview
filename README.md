@@ -54,7 +54,7 @@ or
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
-htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new HtmlRemoteImageGetter(htmlTextView));
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new HtmlHttpImageGetter(htmlTextView));
 ```
 
 or
@@ -63,7 +63,7 @@ or
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
-htmlTextView.setHtml(R.raw.help, new HtmlRemoteImageGetter(htmlTextView));
+htmlTextView.setHtml(R.raw.help, new HtmlHttpImageGetter(htmlTextView));
 ```
 
 ## Supported HTML tags
@@ -124,7 +124,7 @@ See LICENSE for full license text.
 ## Authors
 - This library was put together by Dominik Schürmann
 - Original [HtmlTagHandler](https://gist.github.com/mlakkadshaw/5983704) developed by [Mohammed Lakkadshaw](http://blog.mohammedlakkadshaw.com/)
-- Original [HtmlRemoteImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
+- Original [HtmlHttpImageGetter](https://gist.github.com/Antarix/4167655) developed by Antarix Tandon
 - Original [HtmlLocalImageGetter](http://stackoverflow.com/a/22298833) developed by drawk
 - [JellyBeanSpanFixTextView](https://gist.github.com/pyricau/3424004) (with fix from comment) developed by Pierre-Yves Ricau
 - [Table support](https://github.com/SufficientlySecure/html-textview/pull/33) added by Richard Thai

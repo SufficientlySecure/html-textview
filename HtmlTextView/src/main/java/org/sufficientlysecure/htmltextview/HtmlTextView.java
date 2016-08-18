@@ -174,7 +174,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         if (imageGetter instanceof LocalImageGetter) {
             htmlImageGetter = new HtmlLocalImageGetter(this);
         } else if (imageGetter instanceof RemoteImageGetter) {
-            htmlImageGetter = new HtmlRemoteImageGetter(this,
+            htmlImageGetter = new HtmlHttpImageGetter(this,
                     ((RemoteImageGetter) imageGetter).baseUrl, ((RemoteImageGetter) imageGetter).matchParentWidth);
         } else {
             Log.e(TAG, "Wrong imageGetter!");
