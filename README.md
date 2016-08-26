@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:1.8'
+    compile 'org.sufficientlysecure:html-textview:2.0'
 }
 ```
 
