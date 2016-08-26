@@ -36,7 +36,8 @@ dependencies {
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's drawable folder
-htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlResImageGetter(htmlTextView));
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>",
+    new HtmlResImageGetter(htmlTextView));
 ```
 
 or
@@ -45,7 +46,8 @@ or
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays cat_pic.png from the app's assets folder
-htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>", new HtmlAssetsImageGetter(htmlTextView));
+htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>",
+    new HtmlAssetsImageGetter(htmlTextView));
 ```
 
 or
@@ -54,7 +56,8 @@ or
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
 // loads html from string and displays http://www.example.com/cat_pic.png from the Internet
-htmlTextView.setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"http://www.example.com/cat_pic.png\"/>", new HtmlHttpImageGetter(htmlTextView));
+htmlTextView.setHtml("<h2>Hello wold</h2><img src=\"http://www.example.com/cat_pic.png\"/>",
+    new HtmlHttpImageGetter(htmlTextView));
 ```
 
 or
@@ -62,7 +65,8 @@ or
 ```java
 HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 
-// loads html from raw resource, i.e., a html file in res/raw/, this allows translatable resource (e.g., res/raw-de/ for german)
+// loads html from raw resource, i.e., a html file in res/raw/,
+// this allows translatable resource (e.g., res/raw-de/ for german)
 htmlTextView.setHtml(R.raw.help, new HtmlHttpImageGetter(htmlTextView));
 ```
 
