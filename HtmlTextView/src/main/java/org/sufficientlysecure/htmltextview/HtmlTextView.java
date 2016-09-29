@@ -139,11 +139,9 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     static private CharSequence removeHtmlBottomPadding(@Nullable CharSequence text) {
         if (text == null) {
             return null;
-        } else if (text.length() == 0) {
-            return text;
         }
 
-        while (text.charAt(text.length() - 1) == '\n') {
+        while (text.length() > 0 && text.charAt(text.length() - 1) == '\n') {
             text = text.subSequence(0, text.length() - 1);
         }
         return text;
