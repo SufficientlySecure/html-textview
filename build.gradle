@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.novoda:bintray-release:0.3.4'
     }
 }
@@ -15,5 +15,5 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+    gradleVersion = '3.1'
 }
