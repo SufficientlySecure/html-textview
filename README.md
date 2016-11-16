@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:2.0'
+    compile 'org.sufficientlysecure:html-textview:3.0'
 }
 ```
 
@@ -119,6 +119,14 @@ We recognize the standard table tags:
 * ``<td>``
 
 as well as the tags extended by HtmlTextView. However, support doesn’t currently extend to tags natively supported by Android (e.g. ``<b>``, ``<big>``, ``<h1>``) which means tables will not include the extra styling.
+
+### Changelog
+#### 3.0
+* Removed deprecated methods and classes
+* Fix out of bounds issue
+
+#### 2.0
+* Introduce better API
 
 ## License
 Apache License v2
