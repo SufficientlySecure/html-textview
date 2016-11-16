@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.text.Html;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.io.InputStream;
@@ -78,7 +77,6 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@RawRes int resId, @Nullable Html.ImageGetter imageGetter) {
-        // load html from html file from /res/raw
         InputStream inputStreamText = getContext().getResources().openRawResource(resId);
 
         setHtml(convertStreamToString(inputStreamText), imageGetter);
@@ -93,15 +91,16 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        // this uses Android's Html class for basic parsing, and HtmlTagHandler
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
+
         if (removeFromHtmlSpace) {
             setText(removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, htmlTagHandler)));
         } else {
             setText(Html.fromHtml(html, imageGetter, htmlTagHandler));
         }
+
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
     }
@@ -158,77 +157,4 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         return res;
     }
 
-    @Deprecated
-    public void setHtmlFromRawResource(Context context, @RawRes int resId, @NonNull DeprecatedImageGetter imageGetter) {
-        // load html from html file from /res/raw
-        InputStream inputStreamText = context.getResources().openRawResource(resId);
-
-        setHtmlFromString(convertStreamToString(inputStreamText), imageGetter);
-    }
-
-    @Deprecated
-    public void setHtmlFromString(@NonNull String html, @NonNull DeprecatedImageGetter imageGetter) {
-        Html.ImageGetter htmlImageGetter;
-        if (imageGetter instanceof LocalImageGetter) {
-            htmlImageGetter = new HtmlResImageGetter(this);
-        } else if (imageGetter instanceof RemoteImageGetter) {
-            htmlImageGetter = new HtmlHttpImageGetter(this,
-                    ((RemoteImageGetter) imageGetter).baseUrl, ((RemoteImageGetter) imageGetter).matchParentWidth);
-        } else {
-            Log.e(TAG, "Wrong imageGetter!");
-            return;
-        }
-        setHtml(html, htmlImageGetter);
-    }
-
-    @Deprecated
-    public void setHtmlFromRawResource(Context context, @RawRes int resId, boolean useLocalDrawables) {
-        if (useLocalDrawables) {
-            setHtmlFromRawResource(context, resId, new LocalImageGetter());
-        } else {
-            setHtmlFromRawResource(context, resId, new RemoteImageGetter());
-        }
-    }
-
-    @Deprecated
-    public void setHtmlFromString(@NonNull String html, boolean useLocalDrawables) {
-        if (useLocalDrawables) {
-            setHtmlFromString(html, new LocalImageGetter());
-        } else {
-            setHtmlFromString(html, new RemoteImageGetter());
-        }
-    }
-
-    @Deprecated
-    public interface DeprecatedImageGetter {
-    }
-
-    @Deprecated
-    public static class LocalImageGetter implements DeprecatedImageGetter {
-    }
-
-    @Deprecated
-    public static class RemoteImageGetter implements DeprecatedImageGetter {
-        public String baseUrl;
-        public boolean matchParentWidth = false;
-
-        public RemoteImageGetter() {
-        }
-
-        public RemoteImageGetter(String baseUrl) {
-            this.baseUrl = baseUrl;
-        }
-
-        public RemoteImageGetter(String baseUrl, boolean matchParentWidth) {
-            this(baseUrl);
-            this.matchParentWidth = matchParentWidth;
-        }
-
-        /**
-         * @param matchParentWidth if true,  image will match parent's width.
-         */
-        public RemoteImageGetter(boolean matchParentWidth) {
-            this.matchParentWidth = matchParentWidth;
-        }
-    }
 }
