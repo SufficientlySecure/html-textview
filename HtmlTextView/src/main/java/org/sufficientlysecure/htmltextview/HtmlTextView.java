@@ -95,6 +95,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
 
+        html = htmlTagHandler.overrideTags(html);
+
         if (removeFromHtmlSpace) {
             setText(removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, htmlTagHandler)));
         } else {
