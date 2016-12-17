@@ -19,6 +19,7 @@
 
 package org.sufficientlysecure.htmltextview;
 
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
@@ -39,6 +40,36 @@ import java.util.Stack;
  * Some parts of this code are based on android.text.Html
  */
 public class HtmlTagHandler implements Html.TagHandler {
+
+    public static final String UNORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_UL_TAG";
+    public static final String ORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_OL_TAG";
+    public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
+
+    /**
+     * Newer versions of the Android SDK's {@link Html.TagHandler} handles &lt;ul&gt; and &lt;li&gt;
+     * tags itself which means they never get delegated to this class. We want to handle the tags
+     * ourselves so before passing the string html into Html.fromHtml(), we can use this method to
+     * replace the &lt;ul&gt; and &lt;li&gt; tags with tags of our own.
+     *
+     * @see <a href="https://github.com/android/platform_frameworks_base/commit/8b36c0bbd1503c61c111feac939193c47f812190">Specific Android SDK Commit</a>
+     *
+     * @param html        String containing HTML, for example: "<b>Hello world!</b>"
+     * @return html with replaced <ul> and <li> tags
+     */
+    String overrideTags(@Nullable String html){
+
+        if (html == null) return null;
+
+        html = html.replace("<ul", "<" + UNORDERED_LIST);
+        html = html.replace("</ul>", "</" + UNORDERED_LIST + ">");
+        html = html.replace("<ol", "<" + ORDERED_LIST);
+        html = html.replace("</ol>", "</" + ORDERED_LIST + ">");
+        html = html.replace("<li", "<" + LIST_ITEM);
+        html = html.replace("</li>", "</" + LIST_ITEM + ">");
+
+        return html;
+    }
+
     /**
      * Keeps track of lists (ol, ul). On bottom of Stack is the outermost list
      * and on top of Stack is the most nested list
@@ -112,21 +143,21 @@ public class HtmlTagHandler implements Html.TagHandler {
                 Log.d(HtmlTextView.TAG, "opening, output: " + output.toString());
             }
 
-            if (tag.equalsIgnoreCase("ul")) {
+            if (tag.equalsIgnoreCase(UNORDERED_LIST)) {
                 lists.push(tag);
-            } else if (tag.equalsIgnoreCase("ol")) {
+            } else if (tag.equalsIgnoreCase(ORDERED_LIST)) {
                 lists.push(tag);
                 olNextIndex.push(1);
-            } else if (tag.equalsIgnoreCase("li")) {
+            } else if (tag.equalsIgnoreCase(LIST_ITEM)) {
                 if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
                     output.append("\n");
                 }
                 String parentList = lists.peek();
-                if (parentList.equalsIgnoreCase("ol")) {
+                if (parentList.equalsIgnoreCase(ORDERED_LIST)) {
                     start(output, new Ol());
                     output.append(olNextIndex.peek().toString()).append(". ");
                     olNextIndex.push(olNextIndex.pop() + 1);
-                } else if (parentList.equalsIgnoreCase("ul")) {
+                } else if (parentList.equalsIgnoreCase(UNORDERED_LIST)) {
                     start(output, new Ul());
                 }
             } else if (tag.equalsIgnoreCase("code")) {
@@ -158,13 +189,13 @@ public class HtmlTagHandler implements Html.TagHandler {
                 Log.d(HtmlTextView.TAG, "closing, output: " + output.toString());
             }
 
-            if (tag.equalsIgnoreCase("ul")) {
+            if (tag.equalsIgnoreCase(UNORDERED_LIST)) {
                 lists.pop();
-            } else if (tag.equalsIgnoreCase("ol")) {
+            } else if (tag.equalsIgnoreCase(ORDERED_LIST)) {
                 lists.pop();
                 olNextIndex.pop();
-            } else if (tag.equalsIgnoreCase("li")) {
-                if (lists.peek().equalsIgnoreCase("ul")) {
+            } else if (tag.equalsIgnoreCase(LIST_ITEM)) {
+                if (lists.peek().equalsIgnoreCase(UNORDERED_LIST)) {
                     if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
                         output.append("\n");
                     }
@@ -182,7 +213,7 @@ public class HtmlTagHandler implements Html.TagHandler {
                     end(output, Ul.class, false,
                             new LeadingMarginSpan.Standard(listItemIndent * (lists.size() - 1)),
                             newBullet);
-                } else if (lists.peek().equalsIgnoreCase("ol")) {
+                } else if (lists.peek().equalsIgnoreCase(ORDERED_LIST)) {
                     if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
                         output.append("\n");
                     }
