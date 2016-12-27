@@ -17,6 +17,7 @@
 
 package org.sufficientlysecure.htmltextview;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -80,6 +81,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
         private final WeakReference<UrlDrawable> drawableReference;
         private final WeakReference<HtmlHttpImageGetter> imageGetterReference;
         private final WeakReference<View> containerReference;
+        private final WeakReference<Resources> resources;
         private String source;
         private boolean matchParentWidth;
         private float scale;
@@ -88,13 +90,19 @@ public class HtmlHttpImageGetter implements ImageGetter {
             this.drawableReference = new WeakReference<>(d);
             this.imageGetterReference = new WeakReference<>(imageGetter);
             this.containerReference = new WeakReference<>(container);
+            this.resources = new WeakReference<>(container.getResources());
             this.matchParentWidth = matchParentWidth;
         }
 
         @Override
         protected Drawable doInBackground(String... params) {
             source = params[0];
-            return fetchDrawable(source);
+
+            if (resources.get() != null) {
+                return fetchDrawable(resources.get(), source);
+            }
+
+            return null;
         }
 
         @Override
@@ -126,10 +134,10 @@ public class HtmlHttpImageGetter implements ImageGetter {
         /**
          * Get the Drawable from URL
          */
-        public Drawable fetchDrawable(String urlString) {
+        public Drawable fetchDrawable(Resources res, String urlString) {
             try {
                 InputStream is = fetch(urlString);
-                Drawable drawable = Drawable.createFromStream(is, "src");
+                Drawable drawable = new BitmapDrawable(res, is);
                 scale = getScale(drawable);
                 drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * scale), (int) (drawable.getIntrinsicHeight() * scale));
                 return drawable;
