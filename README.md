@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.sufficientlysecure:html-textview:3.1'
+    compile 'org.sufficientlysecure:html-textview:3.2'
 }
 ```
 
@@ -121,6 +121,13 @@ We recognize the standard table tags:
 as well as the tags extended by HtmlTextView. However, support doesn’t currently extend to tags natively supported by Android (e.g. ``<b>``, ``<big>``, ``<h1>``) which means tables will not include the extra styling.
 
 ### Changelog
+#### 3.2
+* Indenting entries of ordered lists the same way as of unordered lists
+* Fix OutOfMemory
+
+#### 3.1
+*  Override handling of <ul> <ol> and <li> tags done by newer versions of Android SDK (removes empty lines between items)
+
 #### 3.0
 * Removed deprecated methods and classes
 * Fix out of bounds issue
