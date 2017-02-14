@@ -25,6 +25,7 @@ import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
@@ -44,6 +45,11 @@ public class HtmlTagHandler implements Html.TagHandler {
     public static final String UNORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_UL_TAG";
     public static final String ORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_OL_TAG";
     public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
+    private final TextPaint mTextPaint;
+
+    public HtmlTagHandler(TextPaint textPaint) {
+        mTextPaint = textPaint;
+    }
 
     /**
      * Newer versions of the Android SDK's {@link Html.TagHandler} handles &lt;ul&gt; and &lt;li&gt;
@@ -221,7 +227,7 @@ public class HtmlTagHandler implements Html.TagHandler {
                         // Same as in ordered lists: counter the effect of nested Spans
                         numberMargin -= (lists.size() - 2) * listItemIndent;
                     }
-                    NumberSpan numberSpan = new NumberSpan(olNextIndex.lastElement() - 1);
+                    NumberSpan numberSpan = new NumberSpan(mTextPaint, olNextIndex.lastElement() - 1);
                     end(output, Ol.class, false,
                             new LeadingMarginSpan.Standard(numberMargin),
                             numberSpan);
