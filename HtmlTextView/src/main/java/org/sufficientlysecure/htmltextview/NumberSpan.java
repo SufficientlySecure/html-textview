@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.Layout;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.style.LeadingMarginSpan;
 
 /**
@@ -30,10 +31,11 @@ import android.text.style.LeadingMarginSpan;
  */
 public class NumberSpan implements LeadingMarginSpan {
     private final String mNumber;
-    private int mTextWidth;
+    private final int mTextWidth;
 
-    public NumberSpan(int number) {
+    public NumberSpan(TextPaint textPaint, int number) {
         mNumber = Integer.toString(number).concat(". ");
+        mTextWidth = (int) textPaint.measureText(mNumber);
     }
 
     @Override
@@ -48,7 +50,6 @@ public class NumberSpan implements LeadingMarginSpan {
         if (text instanceof Spanned) {
             int spanStart = ((Spanned) text).getSpanStart(this);
             if (spanStart == start) {
-                mTextWidth = (int) p.measureText(mNumber);
                 c.drawText(mNumber, x, baseline, p);
             }
         }
