@@ -126,7 +126,7 @@ as well as the tags extended by HtmlTextView. However, support doesn’t current
 * Fix OutOfMemory
 
 #### 3.1
-*  Override handling of <ul> <ol> and <li> tags done by newer versions of Android SDK (removes empty lines between items)
+*  Override handling of ``<ul>`` ``<ol>`` and ``<li>`` tags done by newer versions of Android SDK (removes empty lines between items)
 
 #### 3.0
 * Removed deprecated methods and classes
