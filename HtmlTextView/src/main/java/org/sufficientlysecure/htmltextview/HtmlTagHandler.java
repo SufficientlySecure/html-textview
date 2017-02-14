@@ -155,7 +155,6 @@ public class HtmlTagHandler implements Html.TagHandler {
                 String parentList = lists.peek();
                 if (parentList.equalsIgnoreCase(ORDERED_LIST)) {
                     start(output, new Ol());
-                    output.append(olNextIndex.peek().toString()).append(". ");
                     olNextIndex.push(olNextIndex.pop() + 1);
                 } else if (parentList.equalsIgnoreCase(UNORDERED_LIST)) {
                     start(output, new Ul());
@@ -222,7 +221,10 @@ public class HtmlTagHandler implements Html.TagHandler {
                         // Same as in ordered lists: counter the effect of nested Spans
                         numberMargin -= (lists.size() - 2) * listItemIndent;
                     }
-                    end(output, Ol.class, false, new LeadingMarginSpan.Standard(numberMargin));
+                    NumberSpan numberSpan = new NumberSpan(olNextIndex.lastElement() - 1);
+                    end(output, Ol.class, false,
+                            new LeadingMarginSpan.Standard(numberMargin),
+                            numberSpan);
                 }
             } else if (tag.equalsIgnoreCase("code")) {
                 end(output, Code.class, false, new TypefaceSpan("monospace"));
