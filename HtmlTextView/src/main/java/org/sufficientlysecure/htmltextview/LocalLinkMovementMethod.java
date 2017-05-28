@@ -68,6 +68,9 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
                             buffer.getSpanEnd(link[0]));
                 }
 
+                if (widget instanceof HtmlTextView) {
+                    ((HtmlTextView) widget).linkHit = true;
+                }
                 return true;
             } else {
                 Selection.removeSelection(buffer);

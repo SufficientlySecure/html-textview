@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -31,11 +32,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
 
+    boolean linkHit;
     @Nullable
     private ClickableTableSpan clickableTableSpan;
     @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
 
+    boolean dontConsumeNonUrlClicks = true;
     private boolean removeFromHtmlSpace = true;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
@@ -144,4 +147,16 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         }
         return text;
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        linkHit = false;
+        boolean res = super.onTouchEvent(event);
+
+        if (dontConsumeNonUrlClicks) {
+            return linkHit;
+        }
+        return res;
+    }
+
 }
