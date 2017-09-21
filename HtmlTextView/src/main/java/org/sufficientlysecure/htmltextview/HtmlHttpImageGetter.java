@@ -18,6 +18,8 @@
 package org.sufficientlysecure.htmltextview;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,6 +29,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -137,22 +141,35 @@ public class HtmlHttpImageGetter implements ImageGetter {
         public Drawable fetchDrawable(Resources res, String urlString) {
             try {
                 InputStream is = fetch(urlString);
-                Drawable drawable = new BitmapDrawable(res, is);
-                scale = getScale(drawable);
-                drawable.setBounds(0, 0, (int) (drawable.getIntrinsicWidth() * scale), (int) (drawable.getIntrinsicHeight() * scale));
-                return drawable;
+                Bitmap original = new BitmapDrawable(res, is).getBitmap();
+
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                original.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                original.recycle();
+                is.close();
+
+                Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+                out.close();
+
+                scale = getScale(decoded);
+                BitmapDrawable b = new BitmapDrawable(res, decoded);
+
+                b.setBounds(0, 0, (int) (b.getIntrinsicWidth() * scale), (int) (b.getIntrinsicHeight() * scale));
+                return b;
             } catch (Exception e) {
                 return null;
             }
         }
 
-        private float getScale(Drawable drawable) {
+        private float getScale(Bitmap bitmap) {
             View container = containerReference.get();
-            if (!matchParentWidth || container == null) {
+            if (container == null) {
                 return 1f;
             }
+
             float maxWidth = container.getWidth();
-            float originalDrawableWidth = drawable.getIntrinsicWidth();
+            float originalDrawableWidth = bitmap.getWidth();
+
             return maxWidth / originalDrawableWidth;
         }
 
