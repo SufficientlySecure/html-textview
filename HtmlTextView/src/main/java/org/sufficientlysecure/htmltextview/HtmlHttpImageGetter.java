@@ -213,7 +213,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
 
         private float getScale(Drawable drawable) {
             View container = containerReference.get();
-            if (!matchParentWidth && container == null) {
+            if (!matchParentWidth || container == null) {
                 return 1f;
             }
 
