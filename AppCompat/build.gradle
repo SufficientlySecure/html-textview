@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+    }
+}
+
+publish {
+    userOrg = 'sufficientlysecure'
+    groupId = rootProject.group
+    artifactId = 'html-textview-appcompat'
+    version = rootProject.version
+    description = 'HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.'
+    website = 'https://github.com/sufficientlysecure/html-textview'
+}
+
+dependencies {
+    compile project(':HtmlTextView')
+    provided "com.android.support:support-annotations:$supportLibraryVersion"
+	compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+}
+
+repositories {
+    jcenter()
+    google()
+}

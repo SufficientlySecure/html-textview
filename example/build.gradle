@@ -18,7 +18,8 @@ android {
 }
 
 dependencies {
-    compile project(':HtmlTextView')
+//    compile project(':HtmlTextView')
+    compile project(':AppCompat')
     compile 'com.android.support:appcompat-v7:25.0.0'
 }
 

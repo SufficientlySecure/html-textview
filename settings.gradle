@@ -1,2 +1,3 @@
 include ':example'
 include ':HtmlTextView'
+include ':AppCompat'
