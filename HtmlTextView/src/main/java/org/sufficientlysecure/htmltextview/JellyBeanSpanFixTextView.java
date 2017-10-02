@@ -38,6 +38,7 @@ import android.widget.TextView;
  * <p/>
  * From https://gist.github.com/pyricau/3424004 with fix from comments
  */
+@SuppressLint("AppCompatCustomView")
 public class JellyBeanSpanFixTextView extends TextView {
     private final JellyBeanSpanFix jellyBeanSpanFix = new JellyBeanSpanFix(new Delegate());
 

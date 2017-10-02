@@ -16,6 +16,7 @@
 
 package org.sufficientlysecure.htmltextview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.util.AttributeSet;
 
 import java.io.InputStream;
 
+@SuppressLint("AppCompatCustomView")
 public class HtmlTextView extends JellyBeanSpanFixTextView implements IHtmlTextView {
 
     private final HtmlTextViewImpl impl = new HtmlTextViewImpl(new Delegate());
