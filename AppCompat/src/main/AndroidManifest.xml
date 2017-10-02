@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="org.sufficientlysecure.htmltextview.appcompat"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="android.support.v7.appcompat, android.support.v4, android.support.fragment, android.support.mediacompat, android.support.coreui, android.support.coreutils, android.support.graphics.drawable, android.support.compat"/>
+
+    <application/>
+
+</manifest>

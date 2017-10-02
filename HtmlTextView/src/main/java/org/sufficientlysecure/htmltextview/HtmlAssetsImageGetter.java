@@ -54,7 +54,7 @@ public class HtmlAssetsImageGetter implements Html.ImageGetter {
             return d;
         } catch (IOException e) {
             // prevent a crash if the resource still can't be found
-            Log.e(HtmlTextView.TAG, "source could not be found: " + source);
+            Log.e(IHtmlTextView.TAG, "source could not be found: " + source);
             return null;
         }
 

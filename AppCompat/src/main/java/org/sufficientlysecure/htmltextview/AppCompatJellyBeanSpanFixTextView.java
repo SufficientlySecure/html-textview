@@ -19,12 +19,13 @@ package org.sufficientlysecure.htmltextview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
  * <p/>
- * A {@link android.widget.TextView} that insert spaces around its text spans where needed to prevent
+ * A {@link TextView} that insert spaces around its text spans where needed to prevent
  * {@link IndexOutOfBoundsException} in {@link #onMeasure(int, int)} on Jelly Bean.
  * <p/>
  * When {@link #onMeasure(int, int)} throws an exception, we try to fix the text by adding spaces
@@ -38,20 +39,19 @@ import android.widget.TextView;
  * <p/>
  * From https://gist.github.com/pyricau/3424004 with fix from comments
  */
-@SuppressLint("AppCompatCustomView")
-public class JellyBeanSpanFixTextView extends TextView {
+public class AppCompatJellyBeanSpanFixTextView extends AppCompatTextView {
     private final JellyBeanSpanFix jellyBeanSpanFix = new JellyBeanSpanFix(new Delegate());
 
-    public JellyBeanSpanFixTextView(
+    public AppCompatJellyBeanSpanFixTextView(
             final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public JellyBeanSpanFixTextView(final Context context, final AttributeSet attrs) {
+    public AppCompatJellyBeanSpanFixTextView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public JellyBeanSpanFixTextView(final Context context) {
+    public AppCompatJellyBeanSpanFixTextView(final Context context) {
         super(context);
     }
 
@@ -64,17 +64,17 @@ public class JellyBeanSpanFixTextView extends TextView {
         @SuppressLint("WrongCall")
         @Override
         public void superOnMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
-            JellyBeanSpanFixTextView.super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            AppCompatJellyBeanSpanFixTextView.super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
         @Override
         public void setText(final CharSequence text) {
-            JellyBeanSpanFixTextView.this.setText(text);
+            AppCompatJellyBeanSpanFixTextView.this.setText(text);
         }
 
         @Override
         public CharSequence getText() {
-            return JellyBeanSpanFixTextView.this.getText();
+            return AppCompatJellyBeanSpanFixTextView.this.getText();
         }
     }
 }

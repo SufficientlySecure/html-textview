@@ -13,14 +13,16 @@ android {
 publish {
     userOrg = 'sufficientlysecure'
     groupId = rootProject.group
-    artifactId = 'html-textview'
+    artifactId = 'html-textview-appcompat'
     version = rootProject.version
     description = 'HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.'
     website = 'https://github.com/sufficientlysecure/html-textview'
 }
 
 dependencies {
+    compile project(':HtmlTextView')
     provided "com.android.support:support-annotations:$supportLibraryVersion"
+	compile "com.android.support:appcompat-v7:$supportLibraryVersion"
 }
 
 repositories {

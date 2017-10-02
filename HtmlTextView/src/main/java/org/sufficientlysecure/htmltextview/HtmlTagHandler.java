@@ -145,8 +145,8 @@ public class HtmlTagHandler implements Html.TagHandler {
     public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
         if (opening) {
             // opening tag
-            if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "opening, output: " + output.toString());
+            if (IHtmlTextView.DEBUG) {
+                Log.d(IHtmlTextView.TAG, "opening, output: " + output.toString());
             }
 
             if (tag.equalsIgnoreCase(UNORDERED_LIST)) {
@@ -192,8 +192,8 @@ public class HtmlTagHandler implements Html.TagHandler {
             }
         } else {
             // closing tag
-            if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "closing, output: " + output.toString());
+            if (IHtmlTextView.DEBUG) {
+                Log.d(IHtmlTextView.TAG, "closing, output: " + output.toString());
             }
 
             if (tag.equalsIgnoreCase(UNORDERED_LIST)) {
@@ -299,8 +299,8 @@ public class HtmlTagHandler implements Html.TagHandler {
         int len = output.length();
         output.setSpan(mark, len, len, Spannable.SPAN_MARK_MARK);
 
-        if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "len: " + len);
+        if (IHtmlTextView.DEBUG) {
+            Log.d(IHtmlTextView.TAG, "len: " + len);
         }
     }
 
@@ -333,9 +333,9 @@ public class HtmlTagHandler implements Html.TagHandler {
                 output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "where: " + where);
-                Log.d(HtmlTextView.TAG, "thisLen: " + thisLen);
+            if (IHtmlTextView.DEBUG) {
+                Log.d(IHtmlTextView.TAG, "where: " + where);
+                Log.d(IHtmlTextView.TAG, "thisLen: " + thisLen);
             }
         }
     }
@@ -379,4 +379,4 @@ public class HtmlTagHandler implements Html.TagHandler {
     public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
         this.drawTableLinkSpan = drawTableLinkSpan;
     }
-} 
+}

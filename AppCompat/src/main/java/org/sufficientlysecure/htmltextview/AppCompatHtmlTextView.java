@@ -16,7 +16,6 @@
 
 package org.sufficientlysecure.htmltextview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -29,22 +28,20 @@ import android.util.AttributeSet;
 
 import java.io.InputStream;
 
-@SuppressLint("AppCompatCustomView")
-public class HtmlTextView extends JellyBeanSpanFixTextView implements IHtmlTextView {
-
+public class AppCompatHtmlTextView extends AppCompatJellyBeanSpanFixTextView implements IHtmlTextView {
     private final HtmlTextViewImpl impl = new HtmlTextViewImpl(new Delegate());
 
-    public HtmlTextView(
+    public AppCompatHtmlTextView(
             @NonNull final Context context, @Nullable final AttributeSet attrs,
             @AttrRes final int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public HtmlTextView(@NonNull final Context context, @Nullable AttributeSet attrs) {
+    public AppCompatHtmlTextView(@NonNull final Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public HtmlTextView(@NonNull final Context context) {
+    public AppCompatHtmlTextView(@NonNull final Context context) {
         super(context);
     }
 
@@ -107,22 +104,22 @@ public class HtmlTextView extends JellyBeanSpanFixTextView implements IHtmlTextV
     private /*inner*/ class Delegate implements HtmlTextViewDelegate {
         @Override
         public void setText(final CharSequence text) {
-            HtmlTextView.this.setText(text);
+            AppCompatHtmlTextView.this.setText(text);
         }
 
         @Override
         public TextPaint getPaint() {
-            return HtmlTextView.this.getPaint();
+            return AppCompatHtmlTextView.this.getPaint();
         }
 
         @Override
         public void setMovementMethod(final MovementMethod movementMethod) {
-            HtmlTextView.this.setMovementMethod(movementMethod);
+            AppCompatHtmlTextView.this.setMovementMethod(movementMethod);
         }
 
         @Override
         public InputStream openRawResource(@RawRes final int resId) {
-            return HtmlTextView.this.getResources().openRawResource(resId);
+            return AppCompatHtmlTextView.this.getResources().openRawResource(resId);
         }
     }
 }

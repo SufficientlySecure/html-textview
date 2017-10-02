@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_vertical_margin" />
 
-        <org.sufficientlysecure.htmltextview.HtmlTextView
+        <org.sufficientlysecure.htmltextview.AppCompatHtmlTextView
             android:id="@+id/html_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
