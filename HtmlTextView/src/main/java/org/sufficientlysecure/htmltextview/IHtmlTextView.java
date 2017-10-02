@@ -6,6 +6,9 @@ import android.support.annotation.RawRes;
 import android.text.Html;
 
 public interface IHtmlTextView {
+    String TAG = "HtmlTextView";
+    boolean DEBUG = false;
+
     /**
      * Loads HTML from a raw resource, i.e., a HTML file in res/raw/.
      * This allows translatable resource (e.g., res/raw-de/ for german).

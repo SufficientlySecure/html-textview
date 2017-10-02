@@ -29,8 +29,6 @@ import android.util.AttributeSet;
 import java.io.InputStream;
 
 public class HtmlTextView extends JellyBeanSpanFixTextView implements IHtmlTextView {
-    public static final String TAG = "HtmlTextView";
-    public static final boolean DEBUG = false;
 
     private final HtmlTextViewImpl impl = new HtmlTextViewImpl(new Delegate());
 

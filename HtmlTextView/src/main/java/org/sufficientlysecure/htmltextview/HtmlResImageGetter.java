@@ -44,7 +44,7 @@ public class HtmlResImageGetter implements Html.ImageGetter {
 
         if (id == 0) {
             // prevent a crash if the resource still can't be found
-            Log.e(HtmlTextView.TAG, "source could not be found: " + source);
+            Log.e(IHtmlTextView.TAG, "source could not be found: " + source);
             return null;
         } else {
             Drawable d = context.getResources().getDrawable(id);

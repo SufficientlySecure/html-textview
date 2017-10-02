@@ -56,8 +56,8 @@ final class JellyBeanSpanFix {
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
             fixSpannedWithSpaces(builder, widthMeasureSpec, heightMeasureSpec);
         } else {
-            if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "The text isn't a Spanned");
+            if (IHtmlTextView.DEBUG) {
+                Log.d(IHtmlTextView.TAG, "The text isn't a Spanned");
             }
             fallbackToString(widthMeasureSpec, heightMeasureSpec);
         }
@@ -80,9 +80,9 @@ final class JellyBeanSpanFix {
             fallbackToString(widthMeasureSpec, heightMeasureSpec);
         }
 
-        if (HtmlTextView.DEBUG) {
+        if (IHtmlTextView.DEBUG) {
             final long fixDuration = System.currentTimeMillis() - startFix;
-            Log.d(HtmlTextView.TAG, "fixSpannedWithSpaces() duration in ms: " + fixDuration);
+            Log.d(IHtmlTextView.TAG, "fixSpannedWithSpaces() duration in ms: " + fixDuration);
         }
     }
 
@@ -113,8 +113,8 @@ final class JellyBeanSpanFix {
             } catch (IndexOutOfBoundsException ignored) {
             }
         }
-        if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "Could not fix the Spanned by adding spaces around spans");
+        if (IHtmlTextView.DEBUG) {
+            Log.d(IHtmlTextView.TAG, "Could not fix the Spanned by adding spaces around spans");
         }
         return FixingResult.notFixed();
     }
@@ -166,8 +166,8 @@ final class JellyBeanSpanFix {
     }
 
     private void fallbackToString(final int widthMeasureSpec, final int heightMeasureSpec) {
-        if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "Fallback to unspanned text");
+        if (IHtmlTextView.DEBUG) {
+            Log.d(IHtmlTextView.TAG, "Fallback to unspanned text");
         }
         final String fallbackText = delegate.getText().toString();
         setTextAndMeasure(fallbackText, widthMeasureSpec, heightMeasureSpec);
