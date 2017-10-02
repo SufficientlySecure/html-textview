@@ -2,26 +2,28 @@ apply plugin: 'com.android.library'
 apply plugin: 'bintray-release'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 25
-        versionCode 13
-        versionName '3.5'
+        minSdkVersion rootProject.ext.minSdkVersion
     }
 }
 
 publish {
     userOrg = 'sufficientlysecure'
-    groupId = 'org.sufficientlysecure'
+    groupId = rootProject.group
     artifactId = 'html-textview'
-    version = '3.5'
+    version = rootProject.version
     description = 'HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.'
     website = 'https://github.com/sufficientlysecure/html-textview'
 }
 
 dependencies {
-    compile 'com.android.support:support-annotations:25.0.0'
+    provided "com.android.support:support-annotations:$supportLibraryVersion"
+}
+
+repositories {
+    jcenter()
+    google()
 }

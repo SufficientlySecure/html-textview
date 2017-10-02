@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "org.sufficientlysecure.htmltextview.example"
@@ -20,4 +20,9 @@ android {
 dependencies {
     compile project(':HtmlTextView')
     compile 'com.android.support:appcompat-v7:25.0.0'
+}
+
+repositories {
+    jcenter()
+    google()
 }

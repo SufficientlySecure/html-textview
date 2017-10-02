@@ -1,19 +1,27 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.novoda:bintray-release:0.3.4'
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.novoda:bintray-release:0.5.0'
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
+ext {
+    compileSdkVersion = 25
+    buildToolsVersion = "26.0.1"
+    minSdkVersion = 7
+
+    supportLibraryVersion = "25.0.0"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '4.1'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
 }
+
+version = '3.5'
+group = 'org.sufficientlysecure'
