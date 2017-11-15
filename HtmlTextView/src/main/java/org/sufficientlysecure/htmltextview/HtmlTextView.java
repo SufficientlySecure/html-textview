@@ -36,7 +36,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
 
-    private boolean removeFromHtmlSpace = true;
+    private boolean removeTrailingWhiteSpace = true;
 
     public HtmlTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -94,7 +94,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
         html = htmlTagHandler.overrideTags(html);
 
-        if (removeFromHtmlSpace) {
+        if (removeTrailingWhiteSpace) {
             setText(removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, htmlTagHandler)));
         } else {
             setText(Html.fromHtml(html, imageGetter, htmlTagHandler));
@@ -105,10 +105,30 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     /**
-     * Note that this must be called before setting text for it to work
+     * The Html.fromHtml method has the behavior of adding extra whitespace at the bottom
+     * of the parsed HTML displayed in for example a TextView. In order to remove this
+     * whitespace call this method before setting the text with setHtml on this TextView.
+     *
+     * @param removeTrailingWhiteSpace true if the whitespace rendered at the bottom of a TextView
+     *                                 after setting HTML should be removed.
      */
+    public void setRemoveTrailingWhiteSpace(boolean removeTrailingWhiteSpace) {
+        this.removeTrailingWhiteSpace = removeTrailingWhiteSpace;
+    }
+
+    /**
+     * The Html.fromHtml method has the behavior of adding extra whitespace at the bottom
+     * of the parsed HTML displayed in for example a TextView. In order to remove this
+     * whitespace call this method before setting the text with setHtml on this TextView.
+     *
+     * This method is deprecated, use setRemoveTrailingWhiteSpace instead.
+     *
+     * @param removeFromHtmlSpace true if the whitespace rendered at the bottom of a TextView
+     *                            after setting HTML should be removed.
+     */
+    @Deprecated()
     public void setRemoveFromHtmlSpace(boolean removeFromHtmlSpace) {
-        this.removeFromHtmlSpace = removeFromHtmlSpace;
+        this.removeTrailingWhiteSpace = removeFromHtmlSpace;
     }
 
     public void setClickableTableSpan(@Nullable ClickableTableSpan clickableTableSpan) {
