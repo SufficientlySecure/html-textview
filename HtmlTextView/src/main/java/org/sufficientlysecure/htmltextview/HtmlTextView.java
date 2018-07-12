@@ -92,7 +92,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler(getPaint());
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
-        htmlTagHandler.setBulletIndent(indent);
+        htmlTagHandler.setListIndentPx(indent);
 
         html = htmlTagHandler.overrideTags(html);
 

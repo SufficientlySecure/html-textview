@@ -381,8 +381,9 @@ public class HtmlTagHandler implements Html.TagHandler {
         }
     }
 
-    public void setBulletIndent(float px) {
-        this.userGivenIndent = Math.round(px);
+    // Util method for setting pixels.
+    public void setListIndentPx(float px) {
+        userGivenIndent = Math.round(px);
     }
 
     public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
