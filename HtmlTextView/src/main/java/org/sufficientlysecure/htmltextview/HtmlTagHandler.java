@@ -108,9 +108,10 @@ public class HtmlTagHandler implements Html.TagHandler {
      */
     int tableTagLevel = 0;
 
-    private static final int indent = 10;
-    private static final int listItemIndent = indent * 2;
-    private static final BulletSpan bullet = new BulletSpan(indent);
+    private static int userGivenIndent = -1;
+    private static final int defaultIndent = 10;
+    private static final int defaultListItemIndent = defaultIndent * 2;
+    private static final BulletSpan defaultBullet = new BulletSpan(defaultIndent);
     private ClickableTableSpan clickableTableSpan;
     private DrawTableLinkSpan drawTableLinkSpan;
 
@@ -203,21 +204,23 @@ public class HtmlTagHandler implements Html.TagHandler {
                 olNextIndex.pop();
             } else if (tag.equalsIgnoreCase(LIST_ITEM)) {
                 if (!lists.isEmpty()) {
+                    int listItemIndent = (userGivenIndent > -1) ? (userGivenIndent * 2) : defaultListItemIndent;
                     if (lists.peek().equalsIgnoreCase(UNORDERED_LIST)) {
                         if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
                             output.append("\n");
                         }
                         // Nested BulletSpans increases distance between bullet and text, so we must prevent it.
-                        int bulletMargin = indent;
+                        int indent = (userGivenIndent > -1) ? userGivenIndent : defaultIndent;
+                        BulletSpan bullet = (userGivenIndent > -1) ? new BulletSpan(userGivenIndent) : defaultBullet;
                         if (lists.size() > 1) {
-                            bulletMargin = indent - bullet.getLeadingMargin(true);
+                            indent = indent - bullet.getLeadingMargin(true);
                             if (lists.size() > 2) {
                                 // This get's more complicated when we add a LeadingMarginSpan into the same line:
                                 // we have also counter it's effect to BulletSpan
-                                bulletMargin -= (lists.size() - 2) * listItemIndent;
+                                indent -= (lists.size() - 2) * listItemIndent;
                             }
                         }
-                        BulletSpan newBullet = new BulletSpan(bulletMargin);
+                        BulletSpan newBullet = new BulletSpan(indent);
                         end(output, Ul.class, false,
                                 new LeadingMarginSpan.Standard(listItemIndent * (lists.size() - 1)),
                                 newBullet);
@@ -225,14 +228,20 @@ public class HtmlTagHandler implements Html.TagHandler {
                         if (output.length() > 0 && output.charAt(output.length() - 1) != '\n') {
                             output.append("\n");
                         }
-                        int numberMargin = listItemIndent * (lists.size() - 1);
-                        if (lists.size() > 2) {
-                            // Same as in ordered lists: counter the effect of nested Spans
-                            numberMargin -= (lists.size() - 2) * listItemIndent;
+
+                        // Nested NumberSpans increases distance between number and text, so we must prevent it.
+                        int indent = (userGivenIndent > -1) ? userGivenIndent : defaultIndent;
+                        NumberSpan span = new NumberSpan(indent, olNextIndex.lastElement() - 1);
+                        if (lists.size() > 1) {
+                            indent = indent - span.getLeadingMargin(true);
+                            if (lists.size() > 2) {
+                                // As with BulletSpan, we need to compensate for the spacing after the number.
+                                indent -= (lists.size() - 2) * listItemIndent;
+                            }
                         }
-                        NumberSpan numberSpan = new NumberSpan(mTextPaint, olNextIndex.lastElement() - 1);
+                        NumberSpan numberSpan = new NumberSpan(indent, olNextIndex.lastElement() - 1);
                         end(output, Ol.class, false,
-                                new LeadingMarginSpan.Standard(numberMargin),
+                                new LeadingMarginSpan.Standard(listItemIndent * (lists.size() - 1)),
                                 numberSpan);
                     }
                 }
@@ -370,6 +379,11 @@ public class HtmlTagHandler implements Html.TagHandler {
             }
             return null;
         }
+    }
+
+    // Util method for setting pixels.
+    public void setListIndentPx(float px) {
+        userGivenIndent = Math.round(px);
     }
 
     public void setClickableTableSpan(ClickableTableSpan clickableTableSpan) {
