@@ -19,6 +19,7 @@ package org.sufficientlysecure.htmltextview.example;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,11 @@ public class MainActivity extends Activity {
         DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
         drawTableLinkSpan.setTableLinkText("[tap for table]");
         textView.setDrawTableLinkSpan(drawTableLinkSpan);
+
+        // Best to use indentation that matches screen density.
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        textView.setListIndentPx(metrics.density * 10);
 
         textView.setHtml(R.raw.example, new HtmlResImageGetter(textView));
     }
