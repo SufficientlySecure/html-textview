@@ -35,6 +35,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     private ClickableTableSpan clickableTableSpan;
     @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
+    private float indent = 24.0f; // Default to 24px.
 
     private boolean removeTrailingWhiteSpace = true;
 
@@ -91,6 +92,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler(getPaint());
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
+        htmlTagHandler.setListIndentPx(indent);
 
         html = htmlTagHandler.overrideTags(html);
 
@@ -137,6 +139,16 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public void setDrawTableLinkSpan(@Nullable DrawTableLinkSpan drawTableLinkSpan) {
         this.drawTableLinkSpan = drawTableLinkSpan;
+    }
+
+    /**
+     * Add ability to increase list item spacing. Useful for configuring spacing based on device
+     * screen size. This applies to ordered and unordered lists.
+     *
+     * @param px    pixels to indent.
+     */
+    public void setListIndentPx(float px) {
+        this.indent = px;
     }
 
     /**
