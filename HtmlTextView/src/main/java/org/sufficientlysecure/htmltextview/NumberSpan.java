@@ -20,67 +20,53 @@ package org.sufficientlysecure.htmltextview;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Parcel;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Layout;
-import android.text.ParcelableSpan;
 import android.text.Spanned;
-import android.text.style.LeadingMarginSpan;
+import android.text.style.BulletSpan;
 
 /**
  * Class to use Numbered Lists in TextViews.
  * The span works the same as {@link android.text.style.BulletSpan} and all lines of the entry have
  * the same leading margin.
  */
-public class NumberSpan implements LeadingMarginSpan, ParcelableSpan {
-    private final int mGapWidth;
+public class NumberSpan extends BulletSpan {
+    private final int mNumberGapWidth;
     private final String mNumber;
 
     public static final int STANDARD_GAP_WIDTH = 10;
 
     public NumberSpan(int gapWidth, int number) {
-        mGapWidth = gapWidth;
+        super();
+        mNumberGapWidth = gapWidth;
         mNumber = Integer.toString(number).concat(".");
     }
 
     public NumberSpan(int number) {
-        mGapWidth = STANDARD_GAP_WIDTH;
-        mNumber = Integer.toString(number).concat(".");
+        this(STANDARD_GAP_WIDTH, number);
     }
 
     public NumberSpan(Parcel src) {
-        mGapWidth = src.readInt();
+        super(src);
+        mNumberGapWidth = src.readInt();
         mNumber = src.readString();
     }
 
-    public int getSpanTypeId() {
-        return getSpanTypeIdInternal();
-    }
-
-    /** @hide */
-    public int getSpanTypeIdInternal() {
-        return 8;
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        writeToParcelInternal(dest, flags);
-    }
-
-    /** @hide */
-    public void writeToParcelInternal(Parcel dest, int flags) {
-        dest.writeInt(mGapWidth);
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(mNumberGapWidth);
+        dest.writeString(mNumber);
     }
 
     public int getLeadingMargin(boolean first) {
-        return 2 * STANDARD_GAP_WIDTH + mGapWidth;
+        return 2 * STANDARD_GAP_WIDTH + mNumberGapWidth;
     }
 
-    public void drawLeadingMargin(Canvas c, Paint p, int x, int dir,
-                                  int top, int baseline, int bottom,
-                                  CharSequence text, int start, int end,
-                                  boolean first, Layout l) {
+    @Override
+    public void drawLeadingMargin(@NonNull Canvas c, @NonNull Paint p, int x, int dir,
+                                  int top, int baseline, int bottom, @NonNull CharSequence text,
+                                  int start, int end, boolean first, @Nullable Layout l) {
         if (((Spanned) text).getSpanStart(this) == start) {
             Paint.Style style = p.getStyle();
 
@@ -88,10 +74,10 @@ public class NumberSpan implements LeadingMarginSpan, ParcelableSpan {
 
             if (c.isHardwareAccelerated()) {
                 c.save();
-                c.drawText(mNumber,x + dir, baseline, p);
+                c.drawText(mNumber, x + dir, baseline, p);
                 c.restore();
             } else {
-                c.drawText(mNumber,x + dir, (top + bottom) / 2.0f, p);
+                c.drawText(mNumber, x + dir, (top + bottom) / 2.0f, p);
             }
 
             p.setStyle(style);
