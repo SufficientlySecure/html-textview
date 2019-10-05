@@ -19,7 +19,8 @@
 
 package org.sufficientlysecure.htmltextview;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
+
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
@@ -57,12 +58,11 @@ public class HtmlTagHandler implements Html.TagHandler {
      * ourselves so before passing the string html into Html.fromHtml(), we can use this method to
      * replace the &lt;ul&gt; and &lt;li&gt; tags with tags of our own.
      *
-     * @see <a href="https://github.com/android/platform_frameworks_base/commit/8b36c0bbd1503c61c111feac939193c47f812190">Specific Android SDK Commit</a>
-     *
-     * @param html        String containing HTML, for example: "<b>Hello world!</b>"
+     * @param html String containing HTML, for example: "<b>Hello world!</b>"
      * @return html with replaced <ul> and <li> tags
+     * @see <a href="https://github.com/android/platform_frameworks_base/commit/8b36c0bbd1503c61c111feac939193c47f812190">Specific Android SDK Commit</a>
      */
-    String overrideTags(@Nullable String html){
+    String overrideTags(@Nullable String html) {
 
         if (html == null) return null;
 

@@ -17,9 +17,11 @@
 package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
+
 import android.text.Html;
 import android.util.AttributeSet;
 
@@ -122,7 +124,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * The Html.fromHtml method has the behavior of adding extra whitespace at the bottom
      * of the parsed HTML displayed in for example a TextView. In order to remove this
      * whitespace call this method before setting the text with setHtml on this TextView.
-     *
+     * <p>
      * This method is deprecated, use setRemoveTrailingWhiteSpace instead.
      *
      * @param removeFromHtmlSpace true if the whitespace rendered at the bottom of a TextView
@@ -145,7 +147,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * Add ability to increase list item spacing. Useful for configuring spacing based on device
      * screen size. This applies to ordered and unordered lists.
      *
-     * @param px    pixels to indent.
+     * @param px pixels to indent.
      */
     public void setListIndentPx(float px) {
         this.indent = px;

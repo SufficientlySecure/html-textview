@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 /**
  * Assets Image Getter
- *
+ * <p>
  * Load image from assets folder
  *
  * @author <a href="mailto:daniel@passos.me">Daniel Passos</a>

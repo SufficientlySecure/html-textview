@@ -38,9 +38,9 @@ import java.net.URI;
 import java.net.URL;
 
 public class HtmlHttpImageGetter implements ImageGetter {
-    TextView container;
-    URI baseUri;
-    boolean matchParentWidth;
+    private TextView container;
+    private URI baseUri;
+    private boolean matchParentWidth;
 
     private boolean compressImage = false;
     private int qualityImage = 50;
