@@ -122,7 +122,8 @@ as well as the tags extended by HtmlTextView. However, support doesn’t current
 
 ### Changelog
 #### 3.7
-* Fix #166
+* Fix [#166](https://github.com/SufficientlySecure/html-textview/issues/166)
+* Migrated to AndroidX
 
 #### 3.6
 * Improve and fix indentions
@@ -135,14 +136,14 @@ as well as the tags extended by HtmlTextView. However, support doesn’t current
 
 #### 3.3
 * Fix text cutting bug
-* prevent EmptyStackException when processing malformed li tags
+* Prevent EmptyStackException when processing malformed li tags
 
 #### 3.2
 * Indenting entries of ordered lists the same way as of unordered lists
 * Fix OutOfMemory
 
 #### 3.1
-*  Override handling of ``<ul>`` ``<ol>`` and ``<li>`` tags done by newer versions of Android SDK (removes empty lines between items)
+* Override handling of ``<ul>`` ``<ol>`` and ``<li>`` tags done by newer versions of Android SDK (removes empty lines between items)
 
 #### 3.0
 * Removed deprecated methods and classes

@@ -15,7 +15,7 @@ publish {
     userOrg = 'sufficientlysecure'
     groupId = 'org.sufficientlysecure'
     artifactId = 'html-textview'
-    publishVersion = '3.7'
+    publishVersion = android.defaultConfig.versionName
     website = 'https://github.com/SufficientlySecure/html-textview'
     desc = 'HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.'
 }
