@@ -1,12 +1,10 @@
 # HtmlTextView for Android
 
-HtmlTextView is an extended TextView component for Android, which can load HTML and converts it into Spannable for displaying it.
-It is a replacement for usage of the WebView component, which behaves strange on some Android versions, flickers while loading, etc.
+HtmlTextView is an extended TextView component for Android, which can load **very simple** HTML by converting it into Android Spannables for viewing.
 
-The library also includes a workaround to prevent TextView from crashing on [specific Android versions](http://code.google.com/p/android/issues/detail?id=35466) and the possibility to load images from local drawables folder or from the Internet.
+In addition to a small set of HTML tags, the library allows to load images from the local drawables folder or from the Internet.
 
 This library is kept tiny without external dependencies.
-I am using it to provide Help/About Activities in my apps.
 
 ## How to import
 
