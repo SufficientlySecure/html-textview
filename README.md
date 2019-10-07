@@ -87,7 +87,7 @@ htmlTextView.setHtml(R.raw.help, new HtmlHttpImageGetter(htmlTextView));
 * ``<cite>``
 * ``<big>``
 * ``<small>``
-* ``<font size="..." color="..." face="...">``
+* ``<font color="..." face="...">``
 * ``<h1>``, ``<h2>``, ``<h3>``, ``<h4>``, ``<h5>``, ``<h6>``
 * ``<a href="...">``
 * ``<img src="...">``
