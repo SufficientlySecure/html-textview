@@ -68,6 +68,25 @@ HtmlTextView htmlTextView = (HtmlTextView) view.findViewById(R.id.html_text);
 htmlTextView.setHtml(R.raw.help, new HtmlHttpImageGetter(htmlTextView));
 ```
 
+or
+
+
+```java
+<TextView
+    android:id="@+id/html_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAppearance="@android:style/TextAppearance.Small" />
+```
+
+```java
+TextView htmlTextView = (TextView) view.findViewById(R.id.html_text);
+
+// loads html from string and displays cat_pic.png from the app's drawable folder
+Spanned formattedHtml = HtmlFormatter.formatHtml(new HtmlFormatterBuilder().setHtml("<h2>Hello wold</h2><ul><li>cats</li><li>dogs</li></ul><img src=\"cat_pic\"/>").setImageGetter(new HtmlResImageGetter(htmlTextView.getContext())));
+htmlTextView.setText(formattedHtml);
+```
+
 ## Supported HTML tags
 
 ### Tags supported by Android ([history of Html class](https://github.com/android/platform_frameworks_base/commits/master/core/java/android/text/Html.java))
