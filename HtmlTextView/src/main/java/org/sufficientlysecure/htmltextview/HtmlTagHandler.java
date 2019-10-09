@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2013-2015 Dominik Schürmann <dominik@schuermann.eu>
  * Copyright (C) 2013-2015 Juha Kuitunen
  * Copyright (C) 2013 Mohammed Lakkadshaw
  * Copyright (C) 2007 The Android Open Source Project
