@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         textView.setListIndentPx(metrics.density * 10);
 
-        textView.setHtml(R.raw.example, new HtmlResImageGetter(textView));
+        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }
 
     @Override

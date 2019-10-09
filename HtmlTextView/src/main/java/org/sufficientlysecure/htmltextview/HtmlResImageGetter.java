@@ -21,20 +21,19 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Log;
-import android.widget.TextView;
+import androidx.annotation.NonNull;
 
 /**
  * Copied from http://stackoverflow.com/a/22298833
  */
 public class HtmlResImageGetter implements Html.ImageGetter {
-    TextView container;
+    private Context context;
 
-    public HtmlResImageGetter(TextView textView) {
-        this.container = textView;
+    public HtmlResImageGetter(@NonNull Context context) {
+        this.context = context;
     }
 
     public Drawable getDrawable(String source) {
-        Context context = container.getContext();
         int id = context.getResources().getIdentifier(source, "drawable", context.getPackageName());
 
         if (id == 0) {

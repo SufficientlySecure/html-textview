@@ -91,18 +91,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler(getPaint());
-        htmlTagHandler.setClickableTableSpan(clickableTableSpan);
-        htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
-        htmlTagHandler.setListIndentPx(indent);
-
-        html = htmlTagHandler.overrideTags(html);
-
-        if (removeTrailingWhiteSpace) {
-            setText(removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, htmlTagHandler)));
-        } else {
-            setText(Html.fromHtml(html, imageGetter, htmlTagHandler));
-        }
+        setText(HtmlFormatter.formatHtml(html, imageGetter, clickableTableSpan, drawTableLinkSpan, indent, removeTrailingWhiteSpace));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
@@ -157,25 +146,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      * http://stackoverflow.com/questions/309424/read-convert-an-inputstream-to-a-string
      */
     @NonNull
-    static private String convertStreamToString(@NonNull InputStream is) {
+    private static String convertStreamToString(@NonNull InputStream is) {
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
-    }
-
-    /**
-     * Html.fromHtml sometimes adds extra space at the bottom.
-     * This methods removes this space again.
-     * See https://github.com/SufficientlySecure/html-textview/issues/19
-     */
-    @Nullable
-    static private CharSequence removeHtmlBottomPadding(@Nullable CharSequence text) {
-        if (text == null) {
-            return null;
-        }
-
-        while (text.length() > 0 && text.charAt(text.length() - 1) == '\n') {
-            text = text.subSequence(0, text.length() - 1);
-        }
-        return text;
     }
 }
