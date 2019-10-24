@@ -138,6 +138,9 @@ We recognize the standard table tags:
 as well as the tags extended by HtmlTextView. However, support doesn’t currently extend to tags natively supported by Android (e.g. ``<b>``, ``<big>``, ``<h1>``) which means tables will not include the extra styling.
 
 ### Changelog
+#### 3.8
+* Add HtmlFormatter for use with standard TextView
+
 #### 3.7
 * Fix [#166](https://github.com/SufficientlySecure/html-textview/issues/166)
 * Migrated to AndroidX
