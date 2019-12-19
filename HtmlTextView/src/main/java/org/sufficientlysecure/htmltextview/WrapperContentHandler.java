@@ -2,7 +2,6 @@ package org.sufficientlysecure.htmltextview;
 
 import android.text.Editable;
 import android.text.Html;
-import android.util.Log;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -21,7 +20,6 @@ public class WrapperContentHandler implements ContentHandler, Html.TagHandler {
 
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
-        Log.d("------->", "handleTag--->" + opening + "-->" + tag + "--->" + output);
         if (mContentHandler == null) {
             mSpannableStringBuilder = output;
             mContentHandler = xmlReader.getContentHandler();
@@ -56,7 +54,6 @@ public class WrapperContentHandler implements ContentHandler, Html.TagHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        Log.d("------->", "startElement--->" + localName + "-->" + qName);
         if (!mTagHandler.handleTag(true, localName, mSpannableStringBuilder, attributes)) {
             mContentHandler.startElement(uri, localName, qName, attributes);
         }
@@ -65,7 +62,6 @@ public class WrapperContentHandler implements ContentHandler, Html.TagHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        Log.d("------->", "endElement--->" + localName + "-->" + qName);
         if (!mTagHandler.handleTag(false, localName, mSpannableStringBuilder, null)) {
             mContentHandler.endElement(uri, localName, qName);
         }
