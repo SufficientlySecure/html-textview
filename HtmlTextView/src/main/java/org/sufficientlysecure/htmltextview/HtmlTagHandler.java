@@ -19,8 +19,6 @@
 
 package org.sufficientlysecure.htmltextview;
 
-import androidx.annotation.Nullable;
-
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
@@ -31,20 +29,26 @@ import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
+import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.View;
 
-import org.xml.sax.XMLReader;
+import androidx.annotation.Nullable;
+
+import org.xml.sax.Attributes;
 
 import java.util.Stack;
 
 /**
  * Some parts of this code are based on android.text.Html
  */
-public class HtmlTagHandler implements Html.TagHandler {
+public class HtmlTagHandler implements WrapperTagHandler {
 
     public static final String UNORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_UL_TAG";
     public static final String ORDERED_LIST = "HTML_TEXTVIEW_ESCAPED_OL_TAG";
     public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
+    public static final String A_ITEM = "HTML_TEXTVIEW_ESCAPED_A_TAG";
+    public static final String PLACEHOLDER_ITEM = "HTML_TEXTVIEW_ESCAPED_PLACEHOLDER";
 
     public HtmlTagHandler() {
     }
@@ -62,13 +66,15 @@ public class HtmlTagHandler implements Html.TagHandler {
     String overrideTags(@Nullable String html) {
 
         if (html == null) return null;
-
+        html = "<" + PLACEHOLDER_ITEM + "></" + PLACEHOLDER_ITEM + ">" + html;
         html = html.replace("<ul", "<" + UNORDERED_LIST);
         html = html.replace("</ul>", "</" + UNORDERED_LIST + ">");
         html = html.replace("<ol", "<" + ORDERED_LIST);
         html = html.replace("</ol>", "</" + ORDERED_LIST + ">");
         html = html.replace("<li", "<" + LIST_ITEM);
         html = html.replace("</li>", "</" + LIST_ITEM + ">");
+        html = html.replace("<a", "<" + A_ITEM);
+        html = html.replace("</a>", "</" + A_ITEM + ">");
 
         return html;
     }
@@ -111,11 +117,20 @@ public class HtmlTagHandler implements Html.TagHandler {
     private static final BulletSpan defaultBullet = new BulletSpan(defaultIndent);
     private ClickableTableSpan clickableTableSpan;
     private DrawTableLinkSpan drawTableLinkSpan;
+    private OnClickATagListener onClickATagListener;
 
     private static class Ul {
     }
 
     private static class Ol {
+    }
+
+    private static class A {
+        private String href;
+
+        private A(String href) {
+            this.href = href;
+        }
     }
 
     private static class Code {
@@ -140,7 +155,7 @@ public class HtmlTagHandler implements Html.TagHandler {
     }
 
     @Override
-    public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
+    public boolean handleTag(boolean opening, String tag, Editable output, Attributes attributes) {
         if (opening) {
             // opening tag
             if (HtmlTextView.DEBUG) {
@@ -165,6 +180,9 @@ public class HtmlTagHandler implements Html.TagHandler {
                         start(output, new Ul());
                     }
                 }
+            } else if (tag.equalsIgnoreCase(A_ITEM)) {
+                final String href = attributes != null ? attributes.getValue("href") : null;
+                start(output, new A(href));
             } else if (tag.equalsIgnoreCase("code")) {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
@@ -187,6 +205,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                 start(output, new Th());
             } else if (tag.equalsIgnoreCase("td")) {
                 start(output, new Td());
+            } else {
+                return false;
             }
         } else {
             // closing tag
@@ -242,6 +262,19 @@ public class HtmlTagHandler implements Html.TagHandler {
                                 numberSpan);
                     }
                 }
+            } else if (tag.equalsIgnoreCase(A_ITEM)) {
+                final Object a = getLast(output, A.class);
+                final String href = a instanceof A ? ((A) a).href : null;
+                end(output, A.class, false, new URLSpan(href) {
+                    @Override
+                    public void onClick(View widget) {
+                        if (onClickATagListener != null) {
+                            onClickATagListener.onClick(widget, getURL());
+                        } else {
+                            super.onClick(widget);
+                        }
+                    }
+                });
             } else if (tag.equalsIgnoreCase("code")) {
                 end(output, Code.class, false, new TypefaceSpan("monospace"));
             } else if (tag.equalsIgnoreCase("center")) {
@@ -276,10 +309,13 @@ public class HtmlTagHandler implements Html.TagHandler {
                 end(output, Th.class, false);
             } else if (tag.equalsIgnoreCase("td")) {
                 end(output, Td.class, false);
+            } else {
+                return false;
             }
         }
 
         storeTableTags(opening, tag);
+        return true;
     }
 
     /**
@@ -390,4 +426,8 @@ public class HtmlTagHandler implements Html.TagHandler {
     public void setDrawTableLinkSpan(DrawTableLinkSpan drawTableLinkSpan) {
         this.drawTableLinkSpan = drawTableLinkSpan;
     }
-} 
+
+    public void setOnClickATagListener(OnClickATagListener onClickATagListener) {
+        this.onClickATagListener = onClickATagListener;
+    }
+}

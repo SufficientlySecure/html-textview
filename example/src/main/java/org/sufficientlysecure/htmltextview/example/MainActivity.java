@@ -23,11 +23,15 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import org.sufficientlysecure.htmltextview.ClickableTableSpan;
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
+import org.sufficientlysecure.htmltextview.OnClickATagListener;
 
 import static org.sufficientlysecure.htmltextview.example.WebViewActivity.EXTRA_TABLE_HTML;
 
@@ -66,6 +70,15 @@ public class MainActivity extends Activity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         textView.setListIndentPx(metrics.density * 10);
+
+        // a tag click listener
+textView.setOnClickATagListener(new OnClickATagListener() {
+
+    @Override
+    public void onClick(View widget, @Nullable String href) {
+        Toast.makeText(MainActivity.this, href, Toast.LENGTH_SHORT).show();
+    }
+});
 
         textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }
