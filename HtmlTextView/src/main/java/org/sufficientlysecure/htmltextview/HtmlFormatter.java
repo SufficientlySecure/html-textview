@@ -17,6 +17,7 @@ package org.sufficientlysecure.htmltextview;
 import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Spanned;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -26,22 +27,23 @@ public class HtmlFormatter {
     }
 
     public static Spanned formatHtml(@NonNull HtmlFormatterBuilder builder) {
-        return formatHtml(builder.getHtml(), builder.getImageGetter(), builder.getClickableTableSpan(), builder.getDrawTableLinkSpan(), builder.getIndent(), builder.isRemoveTrailingWhiteSpace());
+        return formatHtml(builder.getHtml(), builder.getImageGetter(), builder.getClickableTableSpan(), builder.getDrawTableLinkSpan(), builder.getOnClickATagListener(), builder.getIndent(), builder.isRemoveTrailingWhiteSpace());
     }
 
-    public static Spanned formatHtml(@Nullable String html, ImageGetter imageGetter, ClickableTableSpan clickableTableSpan, DrawTableLinkSpan drawTableLinkSpan, float indent, boolean removeTrailingWhiteSpace) {
+    public static Spanned formatHtml(@Nullable String html, ImageGetter imageGetter, ClickableTableSpan clickableTableSpan, DrawTableLinkSpan drawTableLinkSpan, OnClickATagListener onClickATagListener, float indent, boolean removeTrailingWhiteSpace) {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
+        htmlTagHandler.setOnClickATagListener(onClickATagListener);
         htmlTagHandler.setListIndentPx(indent);
 
         html = htmlTagHandler.overrideTags(html);
 
         Spanned formattedHtml;
         if (removeTrailingWhiteSpace) {
-            formattedHtml = removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, htmlTagHandler));
+            formattedHtml = removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, new WrapperContentHandler(htmlTagHandler)));
         } else {
-            formattedHtml = Html.fromHtml(html, imageGetter, htmlTagHandler);
+            formattedHtml = Html.fromHtml(html, imageGetter, new WrapperContentHandler(htmlTagHandler));
         }
 
         return formattedHtml;

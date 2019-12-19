@@ -17,13 +17,12 @@
 package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
+import android.text.Html;
+import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
-
-import android.text.Html;
-import android.util.AttributeSet;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -37,6 +36,8 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     private ClickableTableSpan clickableTableSpan;
     @Nullable
     private DrawTableLinkSpan drawTableLinkSpan;
+    @Nullable
+    private OnClickATagListener onClickATagListener;
     private float indent = 24.0f; // Default to 24px.
 
     private boolean removeTrailingWhiteSpace = true;
@@ -91,7 +92,7 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        setText(HtmlFormatter.formatHtml(html, imageGetter, clickableTableSpan, drawTableLinkSpan, indent, removeTrailingWhiteSpace));
+        setText(HtmlFormatter.formatHtml(html, imageGetter, clickableTableSpan, drawTableLinkSpan, onClickATagListener,indent, removeTrailingWhiteSpace));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
@@ -130,6 +131,10 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public void setDrawTableLinkSpan(@Nullable DrawTableLinkSpan drawTableLinkSpan) {
         this.drawTableLinkSpan = drawTableLinkSpan;
+    }
+
+    public void setOnClickATagListener(@Nullable OnClickATagListener onClickATagListener) {
+        this.onClickATagListener = onClickATagListener;
     }
 
     /**

@@ -128,6 +128,18 @@ HtmlTextView now supports HTML tables (to a limited extent) by condensing the te
 
 Take a look at the project's [sample app](https://github.com/SufficientlySecure/html-textview/blob/master/example/src/main/java/org/sufficientlysecure/htmltextview/example/MainActivity.java) for an example.
 
+### Support for A tag click listener
+```
+textView.setOnClickATagListener(new OnClickATagListener() {
+
+    @Override
+    public void onClick(View widget, @Nullable String href) {
+        Toast.makeText(MainActivity.this, href, Toast.LENGTH_SHORT).show();
+    }
+});
+```
+
+
 We recognize the standard table tags:
 
 * ``<table>``
