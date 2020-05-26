@@ -41,6 +41,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
     private TextView container;
     private URI baseUri;
     private boolean matchParentWidth;
+    private int placeHolder;
 
     private boolean compressImage = false;
     private int qualityImage = 50;
@@ -58,7 +59,12 @@ public class HtmlHttpImageGetter implements ImageGetter {
     }
 
     public HtmlHttpImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
+       this(textView,baseUrl,0,matchParentWidth);
+    }
+
+    public HtmlHttpImageGetter(TextView textView, String baseUrl,int placeHolder, boolean matchParentWidth) {
         this.container = textView;
+        this.placeHolder = placeHolder;
         this.matchParentWidth = matchParentWidth;
         if (baseUrl != null) {
             this.baseUri = URI.create(baseUrl);
@@ -76,7 +82,12 @@ public class HtmlHttpImageGetter implements ImageGetter {
 
     public Drawable getDrawable(String source) {
         UrlDrawable urlDrawable = new UrlDrawable();
-
+        if (placeHolder != 0) {
+            Drawable placeDrawable = container.getContext().getResources().getDrawable(placeHolder);
+            placeDrawable.setBounds(0, 0, placeDrawable.getIntrinsicWidth(), placeDrawable.getIntrinsicHeight());
+            urlDrawable.setBounds(0, 0, placeDrawable.getIntrinsicWidth(), placeDrawable.getIntrinsicHeight());
+            urlDrawable.drawable = placeDrawable;
+        }
         // get the actual source
         ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container,
                 matchParentWidth, compressImage, qualityImage);
