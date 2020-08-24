@@ -81,6 +81,8 @@ public class MainActivity extends Activity {
                 toast.show();
             }
         });
+        textView.blockQuoteBackgroundColor=getResources().getColor(R.color.whitish);
+        textView.blockQuoteStripColor=getResources().getColor(R.color.blue);
 
         textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }
