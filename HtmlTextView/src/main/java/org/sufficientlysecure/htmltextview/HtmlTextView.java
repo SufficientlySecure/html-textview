@@ -22,7 +22,6 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.QuoteSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -171,7 +170,6 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
         Spannable spannable = (Spannable) spanned;
         QuoteSpan[] quoteSpans = spannable.getSpans(0, spannable.length() - 1, QuoteSpan.class);
-        Log.d(TAG, "replaceQuoteSpans: " + spannable);
         for (QuoteSpan quoteSpan : quoteSpans) {
             int start = spannable.getSpanStart(quoteSpan);
             int end = spannable.getSpanEnd(quoteSpan);

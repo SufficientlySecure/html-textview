@@ -5,11 +5,8 @@ import android.graphics.Paint;
 import android.text.Layout;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.LineBackgroundSpan;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import static org.sufficientlysecure.htmltextview.HtmlTextView.TAG;
 
 public class DesignQuoteSpan implements LeadingMarginSpan, LineBackgroundSpan {
 
@@ -24,7 +21,6 @@ public class DesignQuoteSpan implements LeadingMarginSpan, LineBackgroundSpan {
         this.stripColor=stripColor;
         this.stripeWidth=stripWidth;
         this.gap=gap;
-        Log.d(TAG, "DesignQuoteSpanClass: Called");
 
     }
 
@@ -46,7 +42,6 @@ public class DesignQuoteSpan implements LeadingMarginSpan, LineBackgroundSpan {
                                   int end,
                                   boolean first,
                                   Layout layout) {
-        Log.d(TAG, "drawLeadingMargin: Called");
 
         Paint.Style style=p.getStyle();
         int paintColor=p.getColor();
@@ -70,7 +65,6 @@ public class DesignQuoteSpan implements LeadingMarginSpan, LineBackgroundSpan {
                                int start,
                                int end,
                                int lineNumber) {
-        Log.d(TAG, "drawBackground: Called");
         int paintColor=paint.getColor();
         paint.setColor(backgroundColor);
         canvas.drawRect((float)left,(float)top,(float)right,(float)bottom,paint);
