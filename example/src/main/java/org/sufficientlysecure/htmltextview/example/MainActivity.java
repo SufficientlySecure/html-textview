@@ -76,10 +76,12 @@ public class MainActivity extends Activity {
         // a tag click listener
         textView.setOnClickATagListener(new OnClickATagListener() {
             @Override
-            public void onClick(View widget, String spannedText, @Nullable String href) {
+            public boolean onClick(View widget, String spannedText, @Nullable String href) {
                 final Toast toast = Toast.makeText(MainActivity.this, null, Toast.LENGTH_SHORT);
                 toast.setText(href);
                 toast.show();
+
+                return false;
             }
         });
     }
