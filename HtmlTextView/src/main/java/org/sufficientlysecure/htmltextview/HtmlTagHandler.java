@@ -32,12 +32,9 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
-
 import androidx.annotation.Nullable;
-
-import org.xml.sax.Attributes;
-
 import java.util.Stack;
+import org.xml.sax.Attributes;
 
 /**
  * Some parts of this code are based on android.text.Html
@@ -117,7 +114,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
     private static final BulletSpan defaultBullet = new BulletSpan(defaultIndent);
     private ClickableTableSpan clickableTableSpan;
     private DrawTableLinkSpan drawTableLinkSpan;
-    private OnClickATagListener onClickATagListener;
+    private HtmlFormatter.TagClickListenerProvider onClickATagListenerProvider;
 
     private static class Ul {
     }
@@ -273,8 +270,9 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 end(output, A.class, false, new URLSpan(href) {
                     @Override
                     public void onClick(View widget) {
-                        if (onClickATagListener != null) {
-                            onClickATagListener.onClick(widget, spannedText, getURL());
+                        if (onClickATagListenerProvider != null) {
+                            onClickATagListenerProvider.provideTagClickListener()
+                                                       .onClick(widget, spannedText, getURL());
                         }
                         super.onClick(widget);
                     }
@@ -431,7 +429,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
         this.drawTableLinkSpan = drawTableLinkSpan;
     }
 
-    public void setOnClickATagListener(OnClickATagListener onClickATagListener) {
-        this.onClickATagListener = onClickATagListener;
+    public void setOnClickATagListenerProvider(HtmlFormatter.TagClickListenerProvider onClickATagListenerProvider) {
+        this.onClickATagListenerProvider = onClickATagListenerProvider;
     }
 }

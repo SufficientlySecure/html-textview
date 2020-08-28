@@ -71,18 +71,17 @@ public class MainActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         textView.setListIndentPx(metrics.density * 10);
 
+        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
+
         // a tag click listener
         textView.setOnClickATagListener(new OnClickATagListener() {
-
             @Override
-            public void onClick(View widget, @Nullable String href) {
+            public void onClick(View widget, String spannedText, @Nullable String href) {
                 final Toast toast = Toast.makeText(MainActivity.this, null, Toast.LENGTH_SHORT);
                 toast.setText(href);
                 toast.show();
             }
         });
-
-        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }
 
     @Override

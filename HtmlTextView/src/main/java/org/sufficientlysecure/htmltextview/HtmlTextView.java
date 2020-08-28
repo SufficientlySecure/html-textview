@@ -92,7 +92,14 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        setText(HtmlFormatter.formatHtml(html, imageGetter, clickableTableSpan, drawTableLinkSpan, onClickATagListener,indent, removeTrailingWhiteSpace));
+        setText(HtmlFormatter.formatHtml(
+            html, imageGetter, clickableTableSpan, drawTableLinkSpan,
+            new HtmlFormatter.TagClickListenerProvider() {
+                @Override public OnClickATagListener provideTagClickListener() {
+                    return onClickATagListener;
+                }
+            }, indent, removeTrailingWhiteSpace
+        ));
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
