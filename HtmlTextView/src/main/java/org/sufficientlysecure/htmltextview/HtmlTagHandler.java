@@ -126,9 +126,11 @@ public class HtmlTagHandler implements WrapperTagHandler {
     }
 
     private static class A {
+        private String text;
         private String href;
 
-        private A(String href) {
+        private A(String text, String href) {
+            this.text = text;
             this.href = href;
         }
     }
@@ -182,7 +184,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 }
             } else if (tag.equalsIgnoreCase(A_ITEM)) {
                 final String href = attributes != null ? attributes.getValue("href") : null;
-                start(output, new A(href));
+                start(output, new A(output.toString(), href));
             } else if (tag.equalsIgnoreCase("code")) {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
@@ -264,15 +266,17 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 }
             } else if (tag.equalsIgnoreCase(A_ITEM)) {
                 final Object a = getLast(output, A.class);
+                final int spanStart = output.getSpanStart(a);
+                final int spanEnd = output.length();
                 final String href = a instanceof A ? ((A) a).href : null;
+                final String spannedText = output.subSequence(spanStart, spanEnd).toString();
                 end(output, A.class, false, new URLSpan(href) {
                     @Override
                     public void onClick(View widget) {
                         if (onClickATagListener != null) {
-                            onClickATagListener.onClick(widget, getURL());
-                        } else {
-                            super.onClick(widget);
+                            onClickATagListener.onClick(widget, spannedText, getURL());
                         }
+                        super.onClick(widget);
                     }
                 });
             } else if (tag.equalsIgnoreCase("code")) {
