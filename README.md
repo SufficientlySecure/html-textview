@@ -151,6 +151,12 @@ as well as the tags extended by HtmlTextView. However, support doesn’t current
 
 ### Changelog
 
+#### 4.0
+* [A tag click enhancements](https://github.com/SufficientlySecure/html-textview/pull/191)
+* [Blockquote styling feature](https://github.com/SufficientlySecure/html-textview/pull/189)
+* [Image placeholder](https://github.com/SufficientlySecure/html-textview/pull/186)
+* Removed deprecated functions
+
 #### 3.9
 * Add A tag click listener
 

@@ -126,21 +126,6 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         this.removeTrailingWhiteSpace = removeTrailingWhiteSpace;
     }
 
-    /**
-     * The Html.fromHtml method has the behavior of adding extra whitespace at the bottom
-     * of the parsed HTML displayed in for example a TextView. In order to remove this
-     * whitespace call this method before setting the text with setHtml on this TextView.
-     * <p>
-     * This method is deprecated, use setRemoveTrailingWhiteSpace instead.
-     *
-     * @param removeFromHtmlSpace true if the whitespace rendered at the bottom of a TextView
-     *                            after setting HTML should be removed.
-     */
-    @Deprecated()
-    public void setRemoveFromHtmlSpace(boolean removeFromHtmlSpace) {
-        this.removeTrailingWhiteSpace = removeFromHtmlSpace;
-    }
-
     public void setClickableTableSpan(@Nullable ClickableTableSpan clickableTableSpan) {
         this.clickableTableSpan = clickableTableSpan;
     }
@@ -171,7 +156,6 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
-
 
     private void replaceQuoteSpans(Spanned spanned) {
 
