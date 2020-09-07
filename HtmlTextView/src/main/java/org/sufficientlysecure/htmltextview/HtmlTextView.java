@@ -18,6 +18,9 @@ package org.sufficientlysecure.htmltextview;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.style.QuoteSpan;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
@@ -31,7 +34,10 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
-
+    public int blockQuoteBackgroundColor= getResources().getColor(R.color.White);
+    public int blockQuoteStripColor= getResources().getColor(R.color.black);
+    public float blockQuoteStripWidth =10F;
+    public float blockQuoteGap=20F;
     @Nullable
     private ClickableTableSpan clickableTableSpan;
     @Nullable
@@ -92,14 +98,16 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      *                    HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
-        setText(HtmlFormatter.formatHtml(
+        Spanned styledText = HtmlFormatter.formatHtml(
             html, imageGetter, clickableTableSpan, drawTableLinkSpan,
             new HtmlFormatter.TagClickListenerProvider() {
                 @Override public OnClickATagListener provideTagClickListener() {
                     return onClickATagListener;
                 }
             }, indent, removeTrailingWhiteSpace
-        ));
+        );
+        replaceQuoteSpans(styledText);
+        setText(styledText);
 
         // make links work
         setMovementMethod(LocalLinkMovementMethod.getInstance());
@@ -162,4 +170,27 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
         Scanner s = new Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+
+
+    private void replaceQuoteSpans(Spanned spanned) {
+
+        Spannable spannable = (Spannable) spanned;
+        QuoteSpan[] quoteSpans = spannable.getSpans(0, spannable.length() - 1, QuoteSpan.class);
+        for (QuoteSpan quoteSpan : quoteSpans) {
+            int start = spannable.getSpanStart(quoteSpan);
+            int end = spannable.getSpanEnd(quoteSpan);
+            int flags = spannable.getSpanFlags(quoteSpan);
+            spannable.removeSpan(quoteSpan);
+            spannable.setSpan(new DesignQuoteSpan(
+                            blockQuoteBackgroundColor,
+                            blockQuoteStripColor,
+                            blockQuoteStripWidth,
+                            blockQuoteGap),
+                    start,
+                    end,
+                    flags);
+        }
+    }
+
+
 }

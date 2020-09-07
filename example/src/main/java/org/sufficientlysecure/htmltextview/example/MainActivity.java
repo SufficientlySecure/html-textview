@@ -71,8 +71,6 @@ public class MainActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         textView.setListIndentPx(metrics.density * 10);
 
-        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
-
         // a tag click listener
         textView.setOnClickATagListener(new OnClickATagListener() {
             @Override
@@ -84,6 +82,10 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+        textView.blockQuoteBackgroundColor=getResources().getColor(R.color.whitish);
+        textView.blockQuoteStripColor=getResources().getColor(R.color.blue);
+
+        textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }
 
     @Override
