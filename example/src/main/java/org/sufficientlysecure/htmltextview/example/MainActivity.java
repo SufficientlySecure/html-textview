@@ -82,8 +82,8 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
-        textView.blockQuoteBackgroundColor=getResources().getColor(R.color.whitish);
-        textView.blockQuoteStripColor=getResources().getColor(R.color.blue);
+        textView.blockQuoteBackgroundColor = getResources().getColor(R.color.whitish);
+        textView.blockQuoteStripColor = getResources().getColor(R.color.blue);
 
         textView.setHtml(R.raw.example, new HtmlResImageGetter(getBaseContext()));
     }

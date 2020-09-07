@@ -34,10 +34,10 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
 
     public static final String TAG = "HtmlTextView";
     public static final boolean DEBUG = false;
-    public int blockQuoteBackgroundColor= getResources().getColor(R.color.White);
-    public int blockQuoteStripColor= getResources().getColor(R.color.black);
-    public float blockQuoteStripWidth =10F;
-    public float blockQuoteGap=20F;
+    public int blockQuoteBackgroundColor = getResources().getColor(R.color.White);
+    public int blockQuoteStripColor = getResources().getColor(R.color.black);
+    public float blockQuoteStripWidth = 10F;
+    public float blockQuoteGap = 20F;
     @Nullable
     private ClickableTableSpan clickableTableSpan;
     @Nullable
@@ -99,12 +99,13 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
      */
     public void setHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter) {
         Spanned styledText = HtmlFormatter.formatHtml(
-            html, imageGetter, clickableTableSpan, drawTableLinkSpan,
-            new HtmlFormatter.TagClickListenerProvider() {
-                @Override public OnClickATagListener provideTagClickListener() {
-                    return onClickATagListener;
-                }
-            }, indent, removeTrailingWhiteSpace
+                html, imageGetter, clickableTableSpan, drawTableLinkSpan,
+                new HtmlFormatter.TagClickListenerProvider() {
+                    @Override
+                    public OnClickATagListener provideTagClickListener() {
+                        return onClickATagListener;
+                    }
+                }, indent, removeTrailingWhiteSpace
         );
         replaceQuoteSpans(styledText);
         setText(styledText);

@@ -29,7 +29,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_web_view);
         String tableHtml = getIntent().getStringExtra(EXTRA_TABLE_HTML);
-        WebView webView = (WebView) findViewById(R.id.web_view);
+        WebView webView = findViewById(R.id.web_view);
         webView.loadData(tableHtml, "text/html", "UTF-8");
     }
 }
