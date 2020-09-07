@@ -32,12 +32,9 @@ import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
-
 import androidx.annotation.Nullable;
-
-import org.xml.sax.Attributes;
-
 import java.util.Stack;
+import org.xml.sax.Attributes;
 
 /**
  * Some parts of this code are based on android.text.Html
@@ -117,7 +114,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
     private static final BulletSpan defaultBullet = new BulletSpan(defaultIndent);
     private ClickableTableSpan clickableTableSpan;
     private DrawTableLinkSpan drawTableLinkSpan;
-    private OnClickATagListener onClickATagListener;
+    private HtmlFormatter.TagClickListenerProvider onClickATagListenerProvider;
 
     private static class Ul {
     }
@@ -126,9 +123,11 @@ public class HtmlTagHandler implements WrapperTagHandler {
     }
 
     private static class A {
+        private String text;
         private String href;
 
-        private A(String href) {
+        private A(String text, String href) {
+            this.text = text;
             this.href = href;
         }
     }
@@ -182,7 +181,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 }
             } else if (tag.equalsIgnoreCase(A_ITEM)) {
                 final String href = attributes != null ? attributes.getValue("href") : null;
-                start(output, new A(href));
+                start(output, new A(output.toString(), href));
             } else if (tag.equalsIgnoreCase("code")) {
                 start(output, new Code());
             } else if (tag.equalsIgnoreCase("center")) {
@@ -264,14 +263,20 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 }
             } else if (tag.equalsIgnoreCase(A_ITEM)) {
                 final Object a = getLast(output, A.class);
+                final int spanStart = output.getSpanStart(a);
+                final int spanEnd = output.length();
                 final String href = a instanceof A ? ((A) a).href : null;
+                final String spannedText = output.subSequence(spanStart, spanEnd).toString();
                 end(output, A.class, false, new URLSpan(href) {
                     @Override
                     public void onClick(View widget) {
-                        if (onClickATagListener != null) {
-                            onClickATagListener.onClick(widget, getURL());
-                        } else {
-                            super.onClick(widget);
+                        if (onClickATagListenerProvider != null) {
+                            boolean clickConsumed =
+                                onClickATagListenerProvider.provideTagClickListener()
+                                                           .onClick(widget, spannedText, getURL());
+                            if (!clickConsumed) {
+                                super.onClick(widget);
+                            }
                         }
                     }
                 });
@@ -427,7 +432,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
         this.drawTableLinkSpan = drawTableLinkSpan;
     }
 
-    public void setOnClickATagListener(OnClickATagListener onClickATagListener) {
-        this.onClickATagListener = onClickATagListener;
+    public void setOnClickATagListenerProvider(HtmlFormatter.TagClickListenerProvider onClickATagListenerProvider) {
+        this.onClickATagListenerProvider = onClickATagListenerProvider;
     }
 }

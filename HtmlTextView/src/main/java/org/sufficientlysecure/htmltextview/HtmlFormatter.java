@@ -26,15 +26,27 @@ public class HtmlFormatter {
     private HtmlFormatter() {
     }
 
-    public static Spanned formatHtml(@NonNull HtmlFormatterBuilder builder) {
-        return formatHtml(builder.getHtml(), builder.getImageGetter(), builder.getClickableTableSpan(), builder.getDrawTableLinkSpan(), builder.getOnClickATagListener(), builder.getIndent(), builder.isRemoveTrailingWhiteSpace());
+    public static Spanned formatHtml(@NonNull final HtmlFormatterBuilder builder) {
+        return formatHtml(
+            builder.getHtml(), builder.getImageGetter(), builder.getClickableTableSpan(),
+            builder.getDrawTableLinkSpan(), new TagClickListenerProvider() {
+                @Override public OnClickATagListener provideTagClickListener() {
+                    return builder.getOnClickATagListener();
+                }
+            }, builder.getIndent(),
+            builder.isRemoveTrailingWhiteSpace()
+        );
     }
 
-    public static Spanned formatHtml(@Nullable String html, ImageGetter imageGetter, ClickableTableSpan clickableTableSpan, DrawTableLinkSpan drawTableLinkSpan, OnClickATagListener onClickATagListener, float indent, boolean removeTrailingWhiteSpace) {
+    interface TagClickListenerProvider {
+        OnClickATagListener provideTagClickListener();
+    }
+
+    public static Spanned formatHtml(@Nullable String html, ImageGetter imageGetter, ClickableTableSpan clickableTableSpan, DrawTableLinkSpan drawTableLinkSpan, TagClickListenerProvider tagClickListenerProvider, float indent, boolean removeTrailingWhiteSpace) {
         final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
         htmlTagHandler.setClickableTableSpan(clickableTableSpan);
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
-        htmlTagHandler.setOnClickATagListener(onClickATagListener);
+        htmlTagHandler.setOnClickATagListenerProvider(tagClickListenerProvider);
         htmlTagHandler.setListIndentPx(indent);
 
         html = htmlTagHandler.overrideTags(html);
