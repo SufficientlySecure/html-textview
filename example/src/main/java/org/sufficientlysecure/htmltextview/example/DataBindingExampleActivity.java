@@ -16,10 +16,11 @@
 package org.sufficientlysecure.htmltextview.example;
 
 import android.app.Activity;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
 
 import org.sufficientlysecure.htmltextview.DrawTableLinkSpan;
 import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
